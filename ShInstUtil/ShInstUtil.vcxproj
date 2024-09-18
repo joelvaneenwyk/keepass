@@ -15,6 +15,7 @@
     <ProjectGuid>{C9FBA6FD-04AC-4B2F-8277-B852B8013DAE}</ProjectGuid>
     <RootNamespace>ShInstUtil</RootNamespace>
     <Keyword>Win32Proj</Keyword>
+    <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
