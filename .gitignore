@@ -34,5 +34,7 @@ Translation/TrlUtil.vshost.exe.manifest
 *.snupkg
 
 net462/
+/versions/
 
-UpgradeLog.htm
+/vcpkg_installed/
+/UpgradeLog.htm
