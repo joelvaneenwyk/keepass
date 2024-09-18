@@ -18,7 +18,6 @@
 */
 
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General assembly properties
@@ -38,5 +37,5 @@ using System.Runtime.InteropServices;
 [assembly: Guid("39aa6f93-a1c9-497f-bad2-cc42a61d5710")]
 
 // Assembly version information
-[assembly: AssemblyVersion("2.57.0.*")]
+[assembly: AssemblyVersion("2.57.0.0")]
 [assembly: AssemblyFileVersion("2.57.0.0")]

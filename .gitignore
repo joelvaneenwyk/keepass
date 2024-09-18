@@ -33,3 +33,5 @@ Translation/TrlUtil.vshost.exe.manifest
 .vscode/
 *.nupkg
 *.snupkg
+
+net462/
