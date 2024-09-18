@@ -1,0 +1,11 @@
+version: "0.2"
+ignorePaths: []
+dictionaryDefinitions:
+  - name: keepass-dotnet
+    path: ./.github/config/keepass-dotnet.dict
+    addWords: true
+dictionaries:
+  - keepass-dotnet
+words: []
+ignoreWords: []
+import: []
