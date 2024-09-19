@@ -9,21 +9,8 @@
     <Platforms>AnyCPU;x64</Platforms>
     <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <OutputPath>..\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;KeeTranslationUtility</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutputPath>..\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;KeeTranslationUtility</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <OutputPath>..\</OutputPath>
-    <DefineConstants>TRACE;KeeTranslationUtility</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutputPath>..\</OutputPath>
-    <DefineConstants>TRACE;KeeTranslationUtility</DefineConstants>
+    <PropertyGroup>
+        <DefineConstants>KeeTranslationUtility</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="obj\**" />

@@ -20,11 +20,10 @@
         <ImplicitUsings>disable</ImplicitUsings>
     </PropertyGroup>
 
-
     <!-- Set Folder Variables -->
     <PropertyGroup>
         <WorkspaceFolder>$(MSBuildThisFileDirectory.TrimEnd('\/'))</WorkspaceFolder>
-        <OutNoSlash>$(WorkspaceFolder)/Binaries/$(Configuration)/$(Platform)$(TargetArchitecture)</OutNoSlash>
+        <OutNoSlash>$(WorkspaceFolder)/Build/$(MSBuildProjectName)/$(Configuration)</OutNoSlash>
         <IntNoSlash>$(WorkspaceFolder)/.build/$(MSBuildProjectName)/$(Configuration)/$(Platform)$(TargetArchitecture)</IntNoSlash>
     </PropertyGroup>
 

@@ -25,26 +25,6 @@
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <OutputPath>..\Build\KeePass\Debug\</OutputPath>
-    <DocumentationFile>..\Build\KeePass\Debug\KeePass.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutputPath>..\Build\KeePass\Debug\</OutputPath>
-    <DocumentationFile>..\Build\KeePass\Debug\KeePass.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <OutputPath>..\Build\KeePass\Release\</OutputPath>
-    <DefineConstants></DefineConstants>
-    <DocumentationFile></DocumentationFile>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutputPath>..\Build\KeePass\Release\</OutputPath>
-    <DefineConstants />
-    <DocumentationFile />
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-  </PropertyGroup>
   <ItemGroup>
     <Compile Remove="obj\**" />
     <EmbeddedResource Remove="obj\**" />
