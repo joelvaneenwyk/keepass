@@ -36,8 +36,7 @@ namespace KeePass.UI
 			{
 				this.RightToLeft = RightToLeft.Yes;
 				// #todo #jve
-				//Show(cParent, new Point(cParent.Width, cParent.Height),
-				// LeftRightAlignment.Left);
+				Show(cParent, new Point(cParent.Width, cParent.Height), ToolStripDropDownDirection.Left);
 			}
 			else Show(cParent, new Point(0, cParent.Height));
 		}

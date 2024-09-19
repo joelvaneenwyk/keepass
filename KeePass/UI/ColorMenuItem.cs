@@ -35,13 +35,14 @@ namespace KeePass.UI
 			get { return m_clr; }
 		}
 
-		public ColorMenuItem(Color clr, int qSize) : base()
+		public ColorMenuItem(Color clr, int qSize)
 		{
 			m_clr = clr;
 			m_qSize = qSize;
 
 			Debug.Assert(this.CanRaiseEvents);
 			// #todo #jve
+			this.ShowShortcutKeys = false;
 			//this.ShowShortcut = false;
 			//this.OwnerDraw = true;
 
@@ -49,38 +50,38 @@ namespace KeePass.UI
 				this.Text = UIUtil.ColorToString(clr);
 		}
 
-		//		protected override void OnDrawItem(DrawItemEventArgs e)
-		//		{
-		//			// base.OnDrawItem(e);
-		//
-		//			Graphics g = e.Graphics;
-		//			Rectangle rectBounds = e.Bounds;
-		//			Rectangle rectFill = new Rectangle(rectBounds.Left + 2,
-		//				rectBounds.Top + 2, rectBounds.Width - 4, rectBounds.Height - 4);
-		//
-		//			bool bFocused = (((e.State & DrawItemState.Focus) != DrawItemState.None) ||
-		//				((e.State & DrawItemState.Selected) != DrawItemState.None));
-		//
-		//			// e.DrawBackground();
-		//			// e.DrawFocusRectangle();
-		//			using (SolidBrush sbBack = new SolidBrush(bFocused ?
-		//				SystemColors.Highlight : SystemColors.Menu))
-		//			{
-		//				g.FillRectangle(sbBack, rectBounds);
-		//			}
-		//
-		//			using (SolidBrush sb = new SolidBrush(m_clr))
-		//			{
-		//				g.FillRectangle(sb, rectFill);
-		//			}
-		//		}
+		protected override void OnPaint(PaintEventArgs e)
+		{
+			// base.OnDrawItem(e);
 
-		//		protected override void OnMeasureItem(MeasureItemEventArgs e)
-		//		{
-		//			// base.OnMeasureItem(e);
-		//
-		//			e.ItemWidth = m_qSize;
-		//			e.ItemHeight = m_qSize;
-		//		}
+			Graphics g = e.Graphics;
+			RectangleF rectBounds = e.Graphics.ClipBounds;
+			RectangleF rectFill = new RectangleF(rectBounds.Left + 2,
+				rectBounds.Top + 2, rectBounds.Width - 4, rectBounds.Height - 4);
+
+			bool bFocused = e.Graphics.IsVisible(rectFill) && this.Selected;
+
+			// e.DrawBackground();
+			// e.DrawFocusRectangle();
+			using (SolidBrush sbBack = new SolidBrush(bFocused ?
+				SystemColors.Highlight : SystemColors.Menu))
+			{
+				g.FillRectangle(sbBack, rectBounds);
+			}
+
+			using (SolidBrush sb = new SolidBrush(m_clr))
+			{
+				g.FillRectangle(sb, rectFill);
+			}
+		}
+
+
+		protected override void SetBounds(Rectangle rect)
+		{
+			rect.Height = m_qSize;
+			rect.Width = m_qSize;
+
+			base.SetBounds(rect);
+		}
 	}
 }

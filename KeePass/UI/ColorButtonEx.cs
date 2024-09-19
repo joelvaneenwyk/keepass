@@ -33,7 +33,7 @@ namespace KeePass.UI
 		private ToolTip m_tt = null;
 
 		private CustomContextMenuEx m_ctx = null;
-		private readonly List<ColorMenuItem> m_lMenuItems = new List<ColorMenuItem>();
+		private readonly List<ToolStripItem> m_lMenuItems = new();
 
 		private Color[] m_vColors = null;
 		[Browsable(false)]
@@ -132,15 +132,15 @@ namespace KeePass.UI
 				mi.Click += this.OnColorMenuItemClick;
 
 				// #todo #jve
-				//if(((i % nBreakAt) == 0) && (i != 0))
-				//	mi.Break = true;
+				if (((i % nBreakAt) == 0) && (i != 0))
+					m_lMenuItems.Add(new ToolStripSeparator());
 
 				m_lMenuItems.Add(mi);
 			}
 
 			m_ctx = new CustomContextMenuEx();
 			// #todo #jve
-			//m_ctx.MenuItems.AddRange(m_lMenuItems.ToArray());
+			m_ctx.Items.AddRange(m_lMenuItems.ToArray());
 			m_ctx.ShowEx(this);
 		}
 

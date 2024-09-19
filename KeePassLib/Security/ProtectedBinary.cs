@@ -111,11 +111,11 @@ namespace KeePassLib.Security
 					for(int i = 0; i < pb.Length; ++i) pb[i] = (byte)i;
 
 					// #todo #jve
-					//ProtectedMemory.Protect(pb, MemoryProtectionScope.SameProcess);
-					//for(int i = 0; i < pb.Length; ++i)
-					//{
-					//	if(pb[i] != (byte)i) { ob = true; break; }
-					//}
+					pb = ProtectedData.Protect(pb, null, DataProtectionScope.CurrentUser);
+					for(int i = 0; i < pb.Length; ++i)
+					{
+						if(pb[i] != (byte)i) { ob = true; break; }
+					}
 				}
 				catch (Exception) { } // Windows 98 / ME
 
@@ -271,8 +271,8 @@ namespace KeePassLib.Security
 			if(ProtectedBinary.ProtectedMemorySupported)
 			{
 				// #todo #jve
-				//ProtectedMemory.Protect(m_pbData, MemoryProtectionScope.SameProcess);
-				//m_mp = PbMemProt.ProtectedMemory;
+				m_pbData = ProtectedData.Protect(m_pbData, null, DataProtectionScope.CurrentUser);
+				m_mp = PbMemProt.ProtectedMemory;
 				return;
 			}
 
@@ -297,20 +297,20 @@ namespace KeePassLib.Security
 			if(m_pbData.Length == 0) return;
 
 			// #todo #jve
-			//if(m_mp == PbMemProt.ProtectedMemory)
-			//	ProtectedMemory.Unprotect(m_pbData, MemoryProtectionScope.SameProcess);
-			//else if(m_mp == PbMemProt.ChaCha20)
-			//{
-			//	byte[] pbIV = new byte[12];
-			//	MemUtil.Int64ToBytesEx(m_lID, pbIV, 4);
-			//	using(ChaCha20Cipher c = new ChaCha20Cipher(g_pbKey32, pbIV, true))
-			//	{
-			//		c.Decrypt(m_pbData, 0, m_pbData.Length);
-			//	}
-			//}
-			//else if(m_mp == PbMemProt.ExtCrypt)
-			//	m_fExtCrypt(m_pbData, PbCryptFlags.Decrypt, m_lID);
-			//else { Debug.Assert(m_mp == PbMemProt.None); }
+			if(m_mp == PbMemProt.ProtectedMemory)
+				ProtectedData.Unprotect(m_pbData, null, DataProtectionScope.CurrentUser);
+			else if(m_mp == PbMemProt.ChaCha20)
+			{
+				byte[] pbIV = new byte[12];
+				MemUtil.Int64ToBytesEx(m_lID, pbIV, 4);
+				using(ChaCha20Cipher c = new ChaCha20Cipher(g_pbKey32, pbIV, true))
+				{
+					c.Decrypt(m_pbData, 0, m_pbData.Length);
+				}
+			}
+			else if(m_mp == PbMemProt.ExtCrypt)
+				m_fExtCrypt(m_pbData, PbCryptFlags.Decrypt, m_lID);
+			else { Debug.Assert(m_mp == PbMemProt.None); }
 
 			m_mp = PbMemProt.None;
 		}

@@ -232,8 +232,9 @@ namespace KeePassLib.Serialization
 #if !KeePassUAP
 					// May throw with Mono
 					// #todo #jve
-					//FileSecurity sec = File.GetAccessControl(m_iocBase.Path, acs);
-					//if(sec != null) pbSec = sec.GetSecurityDescriptorBinaryForm();
+					FileInfo fileInfo = new FileInfo(m_iocBase.Path);
+					FileSecurity sec = fileInfo.GetAccessControl(acs);
+					if (sec != null) pbSec = sec.GetSecurityDescriptorBinaryForm();
 #endif
 				}
 				catch (Exception) { Debug.Assert(NativeLib.IsUnix()); }
@@ -279,7 +280,8 @@ namespace KeePassLib.Serialization
 					sec.SetSecurityDescriptorBinaryForm(pbSec, acs);
 
 					// #todo #jve
-					//File.SetAccessControl(m_iocBase.Path, sec);
+					FileInfo fileInfo = new(m_iocBase.Path);
+					fileInfo.SetAccessControl(sec);
 				}
 #endif
 			}
