@@ -17,16 +17,14 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 namespace KeePass.UI
 {
-	public sealed class CustomContextMenuEx : ContextMenu
+	// #todo #jve ContextMenu is no longer supported. Use ContextMenuStrip instead. For more details see https://docs.microsoft.com/en-us/dotnet/core/compatibility/winforms#removed-controls
+	public sealed class CustomContextMenuEx : ContextMenuStrip
 	{
 		public CustomContextMenuEx() : base() { }
 
@@ -37,8 +35,9 @@ namespace KeePass.UI
 			if(cParent.RightToLeft == RightToLeft.Yes)
 			{
 				this.RightToLeft = RightToLeft.Yes;
-				Show(cParent, new Point(cParent.Width, cParent.Height),
-					LeftRightAlignment.Left);
+				// #todo #jve
+				//Show(cParent, new Point(cParent.Width, cParent.Height),
+				// LeftRightAlignment.Left);
 			}
 			else Show(cParent, new Point(0, cParent.Height));
 		}

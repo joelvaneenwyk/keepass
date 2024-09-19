@@ -22,6 +22,7 @@ using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Text;
 using System.Threading;
+using System.Windows.Forms;
 
 #if !KeePassUAP
 using System.Windows.Forms;

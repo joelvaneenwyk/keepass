@@ -22,6 +22,27 @@
 #warning KP_DEVSNAP is defined!
 #endif
 
+using KeePass.App;
+using KeePass.App.Configuration;
+using KeePass.DataExchange;
+using KeePass.Ecas;
+using KeePass.Forms;
+using KeePass.Native;
+using KeePass.Plugins;
+using KeePass.Resources;
+using KeePass.UI;
+using KeePass.Util;
+using KeePass.Util.Archive;
+using KeePass.Util.XmlSerialization;
+using KeePassLib;
+using KeePassLib.Cryptography;
+using KeePassLib.Cryptography.PasswordGenerator;
+using KeePassLib.Delegates;
+using KeePassLib.Keys;
+using KeePassLib.Resources;
+using KeePassLib.Serialization;
+using KeePassLib.Translation;
+using KeePassLib.Utility;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -36,30 +57,6 @@ using System.Security.Principal;
 using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
-
-using KeePass.App;
-using KeePass.App.Configuration;
-using KeePass.DataExchange;
-using KeePass.Ecas;
-using KeePass.Forms;
-using KeePass.Native;
-using KeePass.Plugins;
-using KeePass.Resources;
-using KeePass.UI;
-using KeePass.Util;
-using KeePass.Util.Archive;
-using KeePass.Util.XmlSerialization;
-
-using KeePassLib;
-using KeePassLib.Cryptography;
-using KeePassLib.Cryptography.PasswordGenerator;
-using KeePassLib.Delegates;
-using KeePassLib.Keys;
-using KeePassLib.Resources;
-using KeePassLib.Serialization;
-using KeePassLib.Translation;
-using KeePassLib.Utility;
-
 using NativeLib = KeePassLib.Native.NativeLib;
 
 namespace KeePass
@@ -871,7 +868,7 @@ namespace KeePass
 				ms.AddAccessRule(mar);
 
 				bool bCreatedNew;
-				return new Mutex(false, strName, out bCreatedNew, ms);
+				return new Mutex(false, strName, out bCreatedNew);
 			}
 			catch(Exception) { } // Windows 9x and Mono 2.0+ (AddAccessRule) throw
 
@@ -1084,15 +1081,15 @@ namespace KeePass
 #if DEBUG
 			if(bEnable)
 			{
-				Debug.Listeners.Clear();
-				Debug.Listeners.AddRange(g_sTraceListeners.Pop());
+				System.Diagnostics.Trace.Listeners.Clear();
+				System.Diagnostics.Trace.Listeners.AddRange(g_sTraceListeners.Pop());
 			}
 			else
 			{
-				TraceListener[] v = new TraceListener[Debug.Listeners.Count];
-				Debug.Listeners.CopyTo(v, 0);
+				TraceListener[] v = new TraceListener[System.Diagnostics.Trace.Listeners.Count];
+				System.Diagnostics.Trace.Listeners.CopyTo(v, 0);
 				g_sTraceListeners.Push(v);
-				Debug.Listeners.Clear();
+				System.Diagnostics.Trace.Listeners.Clear();
 			}
 #endif
 		}

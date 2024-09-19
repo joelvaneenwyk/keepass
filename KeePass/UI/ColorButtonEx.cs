@@ -17,15 +17,13 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+using KeePass.Resources;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-
-using KeePass.Resources;
 
 namespace KeePass.UI
 {
@@ -133,14 +131,16 @@ namespace KeePass.UI
 				ColorMenuItem mi = new ColorMenuItem(m_vColors[i], qSize);
 				mi.Click += this.OnColorMenuItemClick;
 
-				if(((i % nBreakAt) == 0) && (i != 0))
-					mi.Break = true;
+				// #todo #jve
+				//if(((i % nBreakAt) == 0) && (i != 0))
+				//	mi.Break = true;
 
 				m_lMenuItems.Add(mi);
 			}
 
 			m_ctx = new CustomContextMenuEx();
-			m_ctx.MenuItems.AddRange(m_lMenuItems.ToArray());
+			// #todo #jve
+			//m_ctx.MenuItems.AddRange(m_lMenuItems.ToArray());
 			m_ctx.ShowEx(this);
 		}
 

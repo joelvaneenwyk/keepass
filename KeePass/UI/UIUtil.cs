@@ -17,6 +17,20 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+using KeePass.App;
+using KeePass.App.Configuration;
+using KeePass.Native;
+using KeePass.Resources;
+using KeePass.UI.ToolStripRendering;
+using KeePass.Util;
+using KeePass.Util.MultipleValues;
+using KeePass.Util.Spr;
+using KeePassLib;
+using KeePassLib.Collections;
+using KeePassLib.Delegates;
+using KeePassLib.Interfaces;
+using KeePassLib.Utility;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -28,24 +42,6 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-
-using Microsoft.Win32;
-
-using KeePass.App;
-using KeePass.App.Configuration;
-using KeePass.Native;
-using KeePass.Resources;
-using KeePass.UI.ToolStripRendering;
-using KeePass.Util;
-using KeePass.Util.MultipleValues;
-using KeePass.Util.Spr;
-
-using KeePassLib;
-using KeePassLib.Collections;
-using KeePassLib.Delegates;
-using KeePassLib.Interfaces;
-using KeePassLib.Utility;
-
 using NativeLib = KeePassLib.Native.NativeLib;
 
 namespace KeePass.UI
@@ -998,7 +994,7 @@ namespace KeePass.UI
 			int iFilterIndex, string strDefaultExt, bool bMultiSelect, string strContext)
 		{
 			OpenFileDialogEx ofd = new OpenFileDialogEx(strContext);
-			
+
 			if(!string.IsNullOrEmpty(strDefaultExt))
 				ofd.DefaultExt = strDefaultExt;
 
@@ -2284,7 +2280,7 @@ namespace KeePass.UI
 			if(iIndex != iOrgTop) // Prevent unnecessary flicker
 			{
 				// Setting lv.TopItem doesn't work properly
-				
+
 				// lv.EnsureVisible(n - 1);
 				// if(iIndex != (n - 1)) lv.EnsureVisible(iIndex);
 
@@ -2306,7 +2302,7 @@ namespace KeePass.UI
 					iNewLast = Math.Min(iNewLast, n - 1);
 
 					lv.EnsureVisible(iNewLast);
-					
+
 					int iNewTop = GetTopVisibleItem(lv);
 					if(iNewTop > iIndex) // Scrolled too far
 					{
@@ -2472,7 +2468,7 @@ namespace KeePass.UI
 				x = rectScr.X + ((rectScr.Width - w) / 2);
 				y = rectScr.Y + ((rectScr.Height - h) / 2);
 
-				f.SetBounds(x, y, w, h, bs);				
+				f.SetBounds(x, y, w, h, bs);
 			}
 			catch(Exception) { Debug.Assert(false); }
 		}
@@ -3557,15 +3553,16 @@ namespace KeePass.UI
 
 				if(bOp)
 				{
-					ContextMenu cm = cCtx.ContextMenu;
-					ContextMenuStrip cms = cCtx.ContextMenuStrip;
-
-					if(cms != null) cms.Show(Cursor.Position);
-					else if(cm != null)
-					{
-						Point pt = cCtx.PointToClient(Cursor.Position);
-						cm.Show(cCtx, pt);
-					}
+					// #todo #jve ContextMenu is no longer supported. Use ContextMenuStrip instead. For more details see https://docs.microsoft.com/en-us/dotnet/core/compatibility/winforms#removed-controls
+					//ContextMenu cm = cCtx.ContextMenu;
+					//ContextMenuStrip cms = cCtx.ContextMenuStrip;
+					//
+					//if(cms != null) cms.Show(Cursor.Position);
+					//else if(cm != null)
+					//{
+					//	Point pt = cCtx.PointToClient(Cursor.Position);
+					//	cm.Show(cCtx, pt);
+					//}
 				}
 
 				UIUtil.SetHandled(e, true);

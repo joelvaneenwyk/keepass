@@ -19,9 +19,11 @@
 
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
+using System.Security.Cryptography;
+using System.Windows.Forms;
 
 #if !KeePassUAP
 using System.Drawing;

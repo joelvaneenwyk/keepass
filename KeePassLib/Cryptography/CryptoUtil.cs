@@ -18,11 +18,10 @@
 */
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using System.Text;
+using System.Security.Cryptography;
 
 #if !KeePassUAP
 using System.Security.Cryptography;

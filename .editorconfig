@@ -17,3 +17,8 @@ tab_width = 4
 [*.{csproj,props}]
 indent_size = 2
 indent_style = space
+
+
+[*.{yml,yaml}]
+indent_size = 2
+indent_style = space
