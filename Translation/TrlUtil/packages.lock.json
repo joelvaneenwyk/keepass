@@ -42,6 +42,6 @@
         }
       }
     },
-    ".NETFramework,Version=v4.6.2/win-x64": {}
+    ".NETFramework,Version=v4.6.2/win-x86": {}
   }
 }

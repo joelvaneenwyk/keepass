@@ -8,7 +8,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeePass", "KeePass\KeePass.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrlUtil", "Translation\TrlUtil\TrlUtil.csproj", "{B7E890E7-BF50-4450-9A52-C105BD98651C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HIBPOfflineCheckPlugin", "Plugins\OfflinePasswordCheck\HIBPOfflineCheck\HIBPOfflineCheckPlugin.csproj", "{376D8E2F-7913-404A-BF09-F62A77114264}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfflinePasswordCheckPlugin", "Plugins\OfflinePasswordCheck\OfflinePasswordCheck\OfflinePasswordCheckPlugin.csproj", "{376D8E2F-7913-404A-BF09-F62A77114264}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{F8B54EC5-C1FB-4567-A8D2-A78CF93B34FE}"
 EndProject
