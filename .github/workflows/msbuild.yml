@@ -33,11 +33,12 @@ jobs:
         fetch-depth: 0
         submodules: recursive
 
-    - name: Add MSBuild to PATH
-      uses: microsoft/setup-msbuild@v2
+    - uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.x'
 
-    - name: Restore NuGet packages
-      run: nuget restore ${{env.SOLUTION_FILE_PATH}}
+    - name: Restore Packages
+      run: dotnet restore
 
     - name: Build
-      run: msbuild /m /p:Configuration="${{ matrix.configuration }}" "${{ env.SOLUTION_FILE_PATH }}"
+      run: dotnet build
