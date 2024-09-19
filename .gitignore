@@ -29,13 +29,18 @@ _ReSharper*/
 Translation/KeePass.xml
 Translation/TrlUtil.vshost.exe.manifest
 .vs/
-.vscode/
 *.nupkg
 *.snupkg
 
-net462/
+/Bin/
+/Binaries/
 /versions/
-out/
 
+# C# intermediate files
+net462/
+out/
+.build/
+
+# vcpkg
 /vcpkg_installed/
 /UpgradeLog.htm
