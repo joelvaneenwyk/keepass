@@ -20,6 +20,6 @@
     <developmentDependency>true</developmentDependency>
   </metadata>
   <files>
-    <file src="..\keepass_256x256.png" target="content\" />
+    <file src="Resources/Images/keepass_256x256.png" target="content\" />
   </files>
 </package>

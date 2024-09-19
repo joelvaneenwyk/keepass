@@ -13,12 +13,18 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
+        <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
         <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
         <TargetFramework>net462</TargetFramework>
         <Nullable>disable</Nullable>
         <ImplicitUsings>disable</ImplicitUsings>
     </PropertyGroup>
+
+    <ItemGroup>
+        <!-- use 'PackageVersion' rather than 'PackageReference' -->
+        <PackageVersion Include="KeePass" Version="2.57.0.28775" />
+        <PackageVersion Include="System.Resources.Extensions" Version="8.0.0" />
+    </ItemGroup>
 
     <!-- Set Folder Variables -->
     <PropertyGroup>
