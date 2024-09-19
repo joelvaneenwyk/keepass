@@ -23,8 +23,6 @@ using System.Windows.Forms;
 
 namespace KeePass.UI
 {
-	// #todo #jve MenuItem is no longer supported. Use ToolStripMenuItem instead.
-	// For more details see https://docs.microsoft.com/en-us/dotnet/core/compatibility/winforms#removed-controls
 	public sealed class ColorMenuItem : ToolStripMenuItem
 	{
 		private readonly Color m_clr;
@@ -41,10 +39,7 @@ namespace KeePass.UI
 			m_qSize = qSize;
 
 			Debug.Assert(this.CanRaiseEvents);
-			// #todo #jve
 			this.ShowShortcutKeys = false;
-			//this.ShowShortcut = false;
-			//this.OwnerDraw = true;
 
 			if(AccessibilityEx.Enabled)
 				this.Text = UIUtil.ColorToString(clr);

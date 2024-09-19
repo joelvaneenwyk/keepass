@@ -23,11 +23,8 @@ using System.Windows.Forms;
 
 namespace KeePass.UI
 {
-	// #todo #jve ContextMenu is no longer supported. Use ContextMenuStrip instead. For more details see https://docs.microsoft.com/en-us/dotnet/core/compatibility/winforms#removed-controls
 	public sealed class CustomContextMenuEx : ContextMenuStrip
 	{
-		public CustomContextMenuEx() : base() { }
-
 		public void ShowEx(Control cParent)
 		{
 			if(cParent == null) { Debug.Assert(false); return; }
@@ -35,7 +32,6 @@ namespace KeePass.UI
 			if(cParent.RightToLeft == RightToLeft.Yes)
 			{
 				this.RightToLeft = RightToLeft.Yes;
-				// #todo #jve
 				Show(cParent, new Point(cParent.Width, cParent.Height), ToolStripDropDownDirection.Left);
 			}
 			else Show(cParent, new Point(0, cParent.Height));

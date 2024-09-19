@@ -24,7 +24,6 @@ using System.Reflection;
 using System.Security.Cryptography;
 
 #if !KeePassUAP
-using System.Security.Cryptography;
 #endif
 
 using KeePassLib.Native;
@@ -34,6 +33,8 @@ namespace KeePassLib.Cryptography
 {
 	public static class CryptoUtil
 	{
+		public static byte[] g_Entropy = { 0, 1, 2, 3, 4, 1, 2, 3, 4 };
+
 		private static bool? g_obProtData = null;
 		public static bool IsProtectedDataSupported
 		{

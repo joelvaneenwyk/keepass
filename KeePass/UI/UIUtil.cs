@@ -3553,9 +3553,7 @@ namespace KeePass.UI
 
 				if(bOp)
 				{
-					// #todo #jve ContextMenu is no longer supported. Use ContextMenuStrip instead. For more details see https://docs.microsoft.com/en-us/dotnet/core/compatibility/winforms#removed-controls
-					ContextMenuStrip cms = cCtx.ContextMenuStrip;
-					if (cms != null) cms.Show(Cursor.Position);
+					cCtx.ContextMenuStrip?.Show(Cursor.Position);
 				}
 
 				UIUtil.SetHandled(e, true);

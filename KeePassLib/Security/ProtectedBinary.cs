@@ -19,6 +19,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 
 #if !KeePassUAP
@@ -111,10 +112,10 @@ namespace KeePassLib.Security
 					for(int i = 0; i < pb.Length; ++i) pb[i] = (byte)i;
 
 					// #todo #jve
-					pb = ProtectedData.Protect(pb, null, DataProtectionScope.CurrentUser);
-					for(int i = 0; i < pb.Length; ++i)
+					byte[] pb2 = ProtectedData.Protect(pb, CryptoUtil.g_Entropy, DataProtectionScope.CurrentUser);
+					for (int i = 0; i < pb2.Length; ++i)
 					{
-						if(pb[i] != (byte)i) { ob = true; break; }
+						if (pb2[i] != (byte)i) { ob = true; break; }
 					}
 				}
 				catch (Exception) { } // Windows 98 / ME
@@ -271,7 +272,8 @@ namespace KeePassLib.Security
 			if(ProtectedBinary.ProtectedMemorySupported)
 			{
 				// #todo #jve
-				m_pbData = ProtectedData.Protect(m_pbData, null, DataProtectionScope.CurrentUser);
+				var source = m_pbData.ToArray();
+				m_pbData = ProtectedData.Protect(source, CryptoUtil.g_Entropy, DataProtectionScope.CurrentUser);
 				m_mp = PbMemProt.ProtectedMemory;
 				return;
 			}
@@ -298,7 +300,10 @@ namespace KeePassLib.Security
 
 			// #todo #jve
 			if(m_mp == PbMemProt.ProtectedMemory)
-				ProtectedData.Unprotect(m_pbData, null, DataProtectionScope.CurrentUser);
+			{
+				var raw = m_pbData.ToArray();
+				m_pbData = ProtectedData.Unprotect(raw, CryptoUtil.g_Entropy, DataProtectionScope.CurrentUser);
+			}
 			else if(m_mp == PbMemProt.ChaCha20)
 			{
 				byte[] pbIV = new byte[12];

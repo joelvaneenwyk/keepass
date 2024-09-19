@@ -280,7 +280,7 @@ namespace KeePassLib.Serialization
 					sec.SetSecurityDescriptorBinaryForm(pbSec, acs);
 
 					// #todo #jve
-					FileInfo fileInfo = new(m_iocBase.Path);
+					FileInfo fileInfo = new FileInfo(m_iocBase.Path);
 					fileInfo.SetAccessControl(sec);
 				}
 #endif

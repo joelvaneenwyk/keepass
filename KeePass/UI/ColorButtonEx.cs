@@ -131,15 +131,13 @@ namespace KeePass.UI
 				ColorMenuItem mi = new ColorMenuItem(m_vColors[i], qSize);
 				mi.Click += this.OnColorMenuItemClick;
 
-				// #todo #jve
 				if (((i % nBreakAt) == 0) && (i != 0))
 					m_lMenuItems.Add(new ToolStripSeparator());
 
 				m_lMenuItems.Add(mi);
 			}
 
-			m_ctx = new CustomContextMenuEx();
-			// #todo #jve
+			m_ctx = new();
 			m_ctx.Items.AddRange(m_lMenuItems.ToArray());
 			m_ctx.ShowEx(this);
 		}
