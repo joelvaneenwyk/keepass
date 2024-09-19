@@ -1,0 +1,4 @@
+[submodule "Plugins/OfflinePasswordCheck"]
+	path = Plugins/OfflinePasswordCheck
+	url = https://github.com/joelvaneenwyk/keepass-plugin-offline-password-check.git
+	branch = main
