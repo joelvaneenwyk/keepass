@@ -26,6 +26,11 @@
     <DefineConstants>TRACE;KeeTranslationUtility</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="obj\**" />
+    <EmbeddedResource Remove="obj\**" />
+    <None Remove="obj\**" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\KeePass\KeePass.csproj" />
   </ItemGroup>
 </Project>
