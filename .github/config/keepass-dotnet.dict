@@ -2,6 +2,7 @@ Bootstrapper
 Cloneable
 comctl
 COMDAT
+Distrib
 dominik
 Dominik
 ebug
@@ -17,6 +18,7 @@ Preserialized
 reichl
 Reichl
 ruleset
+sgen
 snupkg
 Toolset
 vcpkg
