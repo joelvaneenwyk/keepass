@@ -35,7 +35,8 @@
   <!-- Set Folder Variables -->
   <PropertyGroup>
     <WorkspaceFolder>$(MSBuildThisFileDirectory.TrimEnd('\/'))</WorkspaceFolder>
-    <OutNoSlash>$(WorkspaceFolder)/Build/$(MSBuildProjectName)/$(Configuration)</OutNoSlash>
+    <OutNoSlash Condition=" '$(Configuration)' == 'Release' ">$(WorkspaceFolder)/Build</OutNoSlash>
+    <OutNoSlash Condition=" '$(Configuration)' != 'Release' ">$(WorkspaceFolder)/Build/$(Configuration)</OutNoSlash>
     <IntNoSlash>$(WorkspaceFolder)/.build/$(MSBuildProjectName)/$(Configuration)/$(Platform)$(TargetArchitecture)</IntNoSlash>
   </PropertyGroup>
 

@@ -44,5 +44,7 @@ out/
 # vcpkg
 /vcpkg_installed/
 /UpgradeLog.htm
+/Build/net*-*/
+/net*-*/
 
 *.Backup.tmp
