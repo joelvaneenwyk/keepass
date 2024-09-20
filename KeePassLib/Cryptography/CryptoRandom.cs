@@ -17,6 +17,10 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+using KeePassLib.Delegates;
+using KeePassLib.Native;
+using KeePassLib.Security;
+using KeePassLib.Utility;
 using System;
 using System.Collections;
 using System.Diagnostics;
@@ -24,17 +28,6 @@ using System.Drawing;
 using System.Globalization;
 using System.Security.Cryptography;
 using System.Windows.Forms;
-
-#if !KeePassUAP
-using System.Drawing;
-using System.Security.Cryptography;
-using System.Windows.Forms;
-#endif
-
-using KeePassLib.Delegates;
-using KeePassLib.Native;
-using KeePassLib.Security;
-using KeePassLib.Utility;
 
 namespace KeePassLib.Cryptography
 {
@@ -59,10 +52,10 @@ namespace KeePassLib.Cryptography
 			get
 			{
 				CryptoRandom cr;
-				lock(g_oSyncRoot)
+				lock (g_oSyncRoot)
 				{
 					cr = g_pInstance;
-					if(cr == null)
+					if (cr == null)
 					{
 						cr = new CryptoRandom();
 						g_pInstance = cr;
@@ -83,7 +76,7 @@ namespace KeePassLib.Cryptography
 			get
 			{
 				ulong u;
-				lock(m_oSyncRoot) { u = m_uGeneratedBytesCount; }
+				lock (m_oSyncRoot) { u = m_uGeneratedBytesCount; }
 				return u;
 			}
 		}
@@ -112,23 +105,23 @@ namespace KeePassLib.Cryptography
 		/// <param name="pbEntropy">Entropy bytes.</param>
 		public void AddEntropy(byte[] pbEntropy)
 		{
-			if(pbEntropy == null) { Debug.Assert(false); return; }
-			if(pbEntropy.Length == 0) { Debug.Assert(false); return; }
+			if (pbEntropy == null) { Debug.Assert(false); return; }
+			if (pbEntropy.Length == 0) { Debug.Assert(false); return; }
 
 			byte[] pbNewData = pbEntropy;
-			if(pbEntropy.Length > 64)
+			if (pbEntropy.Length > 64)
 			{
 #if KeePassLibSD
 				using(SHA256Managed hNew = new SHA256Managed())
 #else
-				using(SHA512Managed hNew = new SHA512Managed())
+				using (SHA256 hNew = SHA256.Create())
 #endif
 				{
 					pbNewData = hNew.ComputeHash(pbEntropy);
 				}
 			}
 
-			lock(m_oSyncRoot)
+			lock (m_oSyncRoot)
 			{
 				byte[] pbPool = m_pbEntropyPool.ReadData();
 				int cbPool = pbPool.Length;
@@ -141,7 +134,7 @@ namespace KeePassLib.Cryptography
 #if KeePassLibSD
 				using(SHA256Managed hPool = new SHA256Managed())
 #else
-				using(SHA512Managed hPool = new SHA512Managed())
+				using (SHA512Managed hPool = new SHA512Managed())
 #endif
 				{
 					byte[] pbNewPool = hPool.ComputeHash(pbCmp);
@@ -153,36 +146,36 @@ namespace KeePassLib.Cryptography
 				MemUtil.ZeroByteArray(pbPool);
 			}
 
-			if(pbNewData != pbEntropy) MemUtil.ZeroByteArray(pbNewData);
+			if (pbNewData != pbEntropy) MemUtil.ZeroByteArray(pbNewData);
 		}
 
 		private byte[] GetSystemEntropy()
 		{
-			SHA512Managed h = new SHA512Managed();
+			SHA3_512 h = SHA3_512.Create();
 			byte[] pb4 = new byte[4];
 			byte[] pb8 = new byte[8];
 
-			GAction<byte[], bool> f = delegate(byte[] pbValue, bool bClearValue)
+			GAction<byte[], bool> f = delegate (byte[] pbValue, bool bClearValue)
 			{
-				if(pbValue == null) { Debug.Assert(false); return; }
-				if(pbValue.Length == 0) return;
+				if (pbValue == null) { Debug.Assert(false); return; }
+				if (pbValue.Length == 0) return;
 				h.TransformBlock(pbValue, 0, pbValue.Length, pbValue, 0);
-				if(bClearValue) MemUtil.ZeroByteArray(pbValue);
+				if (bClearValue) MemUtil.ZeroByteArray(pbValue);
 			};
-			Action<int> fI32 = delegate(int iValue)
+			Action<int> fI32 = delegate (int iValue)
 			{
 				MemUtil.Int32ToBytesEx(iValue, pb4, 0);
 				f(pb4, false);
 			};
-			Action<long> fI64 = delegate(long lValue)
+			Action<long> fI64 = delegate (long lValue)
 			{
 				MemUtil.Int64ToBytesEx(lValue, pb8, 0);
 				f(pb8, false);
 			};
-			Action<string> fStr = delegate(string strValue)
+			Action<string> fStr = delegate (string strValue)
 			{
-				if(strValue == null) { Debug.Assert(false); return; }
-				if(strValue.Length == 0) return;
+				if (strValue == null) { Debug.Assert(false); return; }
+				if (strValue.Length == 0) return;
 				f(StrUtil.Utf8.GetBytes(strValue), false);
 			};
 
@@ -198,7 +191,7 @@ namespace KeePassLib.Cryptography
 				fI32(pt.X);
 				fI32(pt.Y);
 			}
-			catch(Exception) { Debug.Assert(NativeLib.IsUnix()); }
+			catch (Exception) { Debug.Assert(NativeLib.IsUnix()); }
 #endif
 
 			try
@@ -217,24 +210,24 @@ namespace KeePassLib.Cryptography
 				fI64(Environment.WorkingSet);
 #endif
 			}
-			catch(Exception) { Debug.Assert(false); }
+			catch (Exception) { Debug.Assert(false); }
 
 			try
 			{
-				foreach(DictionaryEntry de in Environment.GetEnvironmentVariables())
+				foreach (DictionaryEntry de in Environment.GetEnvironmentVariables())
 				{
 					fStr(de.Key as string);
 					fStr(de.Value as string);
 				}
 			}
-			catch(Exception) { Debug.Assert(false); }
+			catch (Exception) { Debug.Assert(false); }
 
 			try
 			{
 #if KeePassUAP
 				f(DiagnosticsExt.GetProcessEntropy(), true);
 #elif !KeePassLibSD
-				using(Process p = Process.GetCurrentProcess())
+				using (Process p = Process.GetCurrentProcess())
 				{
 					fI64(p.Handle.ToInt64());
 					fI32(p.HandleCount);
@@ -255,15 +248,15 @@ namespace KeePassLib.Cryptography
 				}
 #endif
 			}
-			catch(Exception) { Debug.Assert(NativeLib.IsUnix()); }
+			catch (Exception) { Debug.Assert(NativeLib.IsUnix()); }
 
 			try
 			{
 				CultureInfo ci = CultureInfo.CurrentCulture;
-				if(ci != null) fI32(ci.GetHashCode());
+				if (ci != null) fI32(ci.GetHashCode());
 				else { Debug.Assert(false); }
 			}
-			catch(Exception) { Debug.Assert(false); }
+			catch (Exception) { Debug.Assert(false); }
 
 			f(Guid.NewGuid().ToByteArray(), false);
 			f(GetCspRandom(), true);
@@ -281,7 +274,7 @@ namespace KeePassLib.Cryptography
 			byte[] pb = new byte[32];
 
 			try { m_rng.GetBytes(pb); }
-			catch(Exception)
+			catch (Exception)
 			{
 				Debug.Assert(false);
 				MemUtil.Int64ToBytesEx(DateTime.UtcNow.ToBinary(), pb, 0);
@@ -292,11 +285,11 @@ namespace KeePassLib.Cryptography
 
 		private byte[] GenerateRandom256()
 		{
-			if(this.GenerateRandom256Pre != null)
+			if (this.GenerateRandom256Pre != null)
 				this.GenerateRandom256Pre(this, EventArgs.Empty);
 
 			byte[] pbCmp;
-			lock(m_oSyncRoot)
+			lock (m_oSyncRoot)
 			{
 				m_uCounter += 0x74D8B29E4D38E161UL;
 
@@ -334,8 +327,8 @@ namespace KeePassLib.Cryptography
 		/// random bytes.</returns>
 		public byte[] GetRandomBytes(uint uRequestedBytes)
 		{
-			if(uRequestedBytes == 0) return MemUtil.EmptyByteArray;
-			if(uRequestedBytes > (uint)int.MaxValue)
+			if (uRequestedBytes == 0) return MemUtil.EmptyByteArray;
+			if (uRequestedBytes > (uint)int.MaxValue)
 			{
 				Debug.Assert(false);
 				throw new ArgumentOutOfRangeException("uRequestedBytes");
@@ -345,7 +338,7 @@ namespace KeePassLib.Cryptography
 			byte[] pbRes = new byte[cbRem];
 			int iPos = 0;
 
-			while(cbRem != 0)
+			while (cbRem != 0)
 			{
 				byte[] pbRandom256 = GenerateRandom256();
 				Debug.Assert(pbRandom256.Length == 32);
@@ -369,7 +362,7 @@ namespace KeePassLib.Cryptography
 			long s64 = DateTime.UtcNow.ToBinary();
 			int s32 = (int)((s64 >> 32) ^ s64);
 
-			lock(g_oSyncRoot)
+			lock (g_oSyncRoot)
 			{
 				unchecked
 				{
@@ -379,7 +372,7 @@ namespace KeePassLib.Cryptography
 			}
 
 			// Prevent overflow in the Random constructor of .NET 2.0
-			if(s32 == int.MinValue) s32 = int.MaxValue;
+			if (s32 == int.MinValue) s32 = int.MaxValue;
 
 			return new Random(s32);
 		}

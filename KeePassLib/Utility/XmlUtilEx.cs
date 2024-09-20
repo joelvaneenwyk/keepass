@@ -17,18 +17,15 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Text;
-using System.Xml;
-using System.Xml.Serialization;
-using System.Xml.XPath;
-
 using KeePassLib.Delegates;
 using KeePassLib.Interfaces;
 using KeePassLib.Serialization;
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Xml;
+using System.Xml.Serialization;
+using System.Xml.XPath;
 
 namespace KeePassLib.Utility
 {
@@ -59,7 +56,9 @@ namespace KeePassLib.Utility
 			xrs.DtdProcessing = DtdProcessing.Prohibit;
 #else
 			// See also PrepMonoDev.sh script
+#pragma warning disable CS0618 // Type or member is obsolete
 			xrs.ProhibitDtd = true; // Obsolete in .NET 4, but still there
+#pragma warning restore CS0618 // Type or member is obsolete
 			// xrs.DtdProcessing = DtdProcessing.Prohibit; // .NET 4 only
 #endif
 
@@ -71,7 +70,7 @@ namespace KeePassLib.Utility
 
 		public static XmlReader CreateXmlReader(Stream s)
 		{
-			if(s == null) { Debug.Assert(false); throw new ArgumentNullException("s"); }
+			if (s == null) { Debug.Assert(false); throw new ArgumentNullException("s"); }
 
 			return XmlReader.Create(s, CreateXmlReaderSettings());
 		}
@@ -91,19 +90,19 @@ namespace KeePassLib.Utility
 
 		public static XmlWriter CreateXmlWriter(Stream s)
 		{
-			if(s == null) { Debug.Assert(false); throw new ArgumentNullException("s"); }
+			if (s == null) { Debug.Assert(false); throw new ArgumentNullException("s"); }
 
 			return XmlWriter.Create(s, CreateXmlWriterSettings());
 		}
 
 		public static T Deserialize<T>(Stream s)
 		{
-			if(s == null) { Debug.Assert(false); throw new ArgumentNullException("s"); }
+			if (s == null) { Debug.Assert(false); throw new ArgumentNullException("s"); }
 
 			XmlSerializer xs = new XmlSerializer(typeof(T));
 
 			T t = default(T);
-			using(XmlReader xr = CreateXmlReader(s))
+			using (XmlReader xr = CreateXmlReader(s))
 			{
 				t = (T)xs.Deserialize(xr);
 			}
@@ -113,10 +112,10 @@ namespace KeePassLib.Utility
 
 		public static void Serialize<T>(Stream s, T t)
 		{
-			if(s == null) { Debug.Assert(false); throw new ArgumentNullException("s"); }
+			if (s == null) { Debug.Assert(false); throw new ArgumentNullException("s"); }
 
 			XmlSerializer xs = new XmlSerializer(typeof(T));
-			using(XmlWriter xw = CreateXmlWriter(s))
+			using (XmlWriter xw = CreateXmlWriter(s))
 			{
 				xs.Serialize(xw, t);
 			}
@@ -133,24 +132,24 @@ namespace KeePassLib.Utility
 			// undocumented details or require the type T to be modified.
 
 			string str;
-			using(MemoryStream ms = new MemoryStream())
+			using (MemoryStream ms = new MemoryStream())
 			{
 				Serialize<T>(ms, t);
 
 				str = StrUtil.Utf8.GetString(ms.ToArray());
 			}
 
-			GFunc<string, string, bool> fFindPfx = delegate(string strText, string strSub)
+			GFunc<string, string, bool> fFindPfx = delegate (string strText, string strSub)
 			{
 				int i = strText.IndexOf(strSub, StringComparison.Ordinal);
-				if(i < 0) return false;
-				if(i == 0) return true;
+				if (i < 0) return false;
+				if (i == 0) return true;
 				return char.IsWhiteSpace(strText[i - 1]);
 			};
 
-			if(bRemoveXsdXsi)
+			if (bRemoveXsdXsi)
 			{
-				if(!fFindPfx(str, "xsd:") && !fFindPfx(str, "xsi:"))
+				if (!fFindPfx(str, "xsd:") && !fFindPfx(str, "xsi:"))
 				{
 					Debug.Assert(str.IndexOf("xmlns:xsd") > 0);
 					str = str.Replace(" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"", string.Empty);
@@ -169,12 +168,12 @@ namespace KeePassLib.Utility
 #if DEBUG
 		internal static void ValidateXml(string strXml, bool bReplaceStdEntities)
 		{
-			if(strXml == null) throw new ArgumentNullException("strXml");
-			if(strXml.Length == 0) { Debug.Assert(false); return; }
+			if (strXml == null) throw new ArgumentNullException("strXml");
+			if (strXml.Length == 0) { Debug.Assert(false); return; }
 
 			string str = strXml;
 
-			if(bReplaceStdEntities)
+			if (bReplaceStdEntities)
 				str = str.Replace("&nbsp;", "&#160;");
 
 			XmlDocument d = new XmlDocument();
@@ -185,13 +184,13 @@ namespace KeePassLib.Utility
 		internal static XPathNodeIterator FindNodes(PwDatabase pd, string strXPath,
 			IStatusLogger sl, out XmlDocument xd)
 		{
-			if(pd == null) throw new ArgumentNullException("pd");
-			if(strXPath == null) { Debug.Assert(false); strXPath = string.Empty; }
+			if (pd == null) throw new ArgumentNullException("pd");
+			if (strXPath == null) { Debug.Assert(false); strXPath = string.Empty; }
 
 			KdbxFile kdbx = new KdbxFile(pd);
 
 			byte[] pbXml;
-			using(MemoryStream ms = new MemoryStream())
+			using (MemoryStream ms = new MemoryStream())
 			{
 				kdbx.Save(ms, null, KdbxFormat.PlainXml, sl);
 				pbXml = ms.ToArray();

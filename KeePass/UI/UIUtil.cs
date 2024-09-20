@@ -671,6 +671,7 @@ namespace KeePass.UI
 		/// <param name="vColumns">Columns of the <c>ListView</c>. The first
 		/// parameter of the key-value pair is the internal string field name,
 		/// and the second one the text displayed in the column header.</param>
+		/// <param name="ilIcons"></param>
 		public static void CreateEntryList(ListView lv, IEnumerable<PwEntry> vEntries,
 			List<KeyValuePair<string, string>> vColumns, ImageList ilIcons)
 		{
@@ -928,6 +929,8 @@ namespace KeePass.UI
 		/// <param name="strExtension">Default extension(s), without leading
 		/// dot. Multiple extensions must be separated by a '|' (e.g.
 		/// "html|htm", having the same description "HTML Files").</param>
+		/// <param name="strDescription"></param>
+		/// <param name="bIncludeAllFiles"></param>
 		public static string CreateFileTypeFilter(string strExtension, string strDescription,
 			bool bIncludeAllFiles)
 		{

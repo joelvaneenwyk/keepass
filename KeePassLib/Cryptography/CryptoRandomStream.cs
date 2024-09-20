@@ -87,10 +87,10 @@ namespace KeePassLib.Cryptography
 		/// and must contain at least 1 byte.</param>
 		public CryptoRandomStream(CrsAlgorithm a, byte[] pbKey)
 		{
-			if(pbKey == null) { Debug.Assert(false); throw new ArgumentNullException("pbKey"); }
+			if (pbKey == null) { Debug.Assert(false); throw new ArgumentNullException("pbKey"); }
 
 			int cbKey = pbKey.Length;
-			if(cbKey <= 0)
+			if (cbKey <= 0)
 			{
 				Debug.Assert(false); // Need at least one byte
 				throw new ArgumentOutOfRangeException("pbKey");
@@ -98,12 +98,12 @@ namespace KeePassLib.Cryptography
 
 			m_alg = a;
 
-			if(a == CrsAlgorithm.ChaCha20)
+			if (a == CrsAlgorithm.ChaCha20)
 			{
 				m_pbKey = new byte[32];
 				m_pbIV = new byte[12];
 
-				using(SHA512Managed h = new SHA512Managed())
+				using (SHA3_512 h = SHA3_512.Create())
 				{
 					byte[] pbHash = h.ComputeHash(pbKey);
 					Array.Copy(pbHash, m_pbKey, 32);
@@ -113,7 +113,7 @@ namespace KeePassLib.Cryptography
 
 				m_chacha20 = new ChaCha20Cipher(m_pbKey, m_pbIV, true);
 			}
-			else if(a == CrsAlgorithm.Salsa20)
+			else if (a == CrsAlgorithm.Salsa20)
 			{
 				m_pbKey = CryptoUtil.HashSha256(pbKey);
 				m_pbIV = new byte[8] { 0xE8, 0x30, 0x09, 0x4B,
@@ -121,17 +121,17 @@ namespace KeePassLib.Cryptography
 
 				m_salsa20 = new Salsa20Cipher(m_pbKey, m_pbIV);
 			}
-			else if(a == CrsAlgorithm.ArcFourVariant)
+			else if (a == CrsAlgorithm.ArcFourVariant)
 			{
 				// Fill the state linearly
 				m_pbState = new byte[256];
-				for(int w = 0; w < 256; ++w) m_pbState[w] = (byte)w;
+				for (int w = 0; w < 256; ++w) m_pbState[w] = (byte)w;
 
 				unchecked
 				{
 					byte j = 0, t;
 					int inxKey = 0;
-					for(int w = 0; w < 256; ++w) // Key setup
+					for (int w = 0; w < 256; ++w) // Key setup
 					{
 						j += (byte)(m_pbState[w] + pbKey[inxKey]);
 
@@ -140,7 +140,7 @@ namespace KeePassLib.Cryptography
 						m_pbState[j] = t;
 
 						++inxKey;
-						if(inxKey >= cbKey) inxKey = 0;
+						if (inxKey >= cbKey) inxKey = 0;
 					}
 				}
 
@@ -161,13 +161,13 @@ namespace KeePassLib.Cryptography
 
 		private void Dispose(bool disposing)
 		{
-			if(disposing)
+			if (disposing)
 			{
-				if(m_alg == CrsAlgorithm.ChaCha20)
+				if (m_alg == CrsAlgorithm.ChaCha20)
 					m_chacha20.Dispose();
-				else if(m_alg == CrsAlgorithm.Salsa20)
+				else if (m_alg == CrsAlgorithm.Salsa20)
 					m_salsa20.Dispose();
-				else if(m_alg == CrsAlgorithm.ArcFourVariant)
+				else if (m_alg == CrsAlgorithm.ArcFourVariant)
 				{
 					MemUtil.ZeroByteArray(m_pbState);
 					m_i = 0;
@@ -175,8 +175,8 @@ namespace KeePassLib.Cryptography
 				}
 				else { Debug.Assert(false); }
 
-				if(m_pbKey != null) MemUtil.ZeroByteArray(m_pbKey);
-				if(m_pbIV != null) MemUtil.ZeroByteArray(m_pbIV);
+				if (m_pbKey != null) MemUtil.ZeroByteArray(m_pbKey);
+				if (m_pbIV != null) MemUtil.ZeroByteArray(m_pbIV);
 
 				m_bDisposed = true;
 			}
@@ -189,24 +189,24 @@ namespace KeePassLib.Cryptography
 		/// <returns>Returns <paramref name="uRequestedCount" /> random bytes.</returns>
 		public byte[] GetRandomBytes(uint uRequestedCount)
 		{
-			if(m_bDisposed) throw new ObjectDisposedException(null);
+			if (m_bDisposed) throw new ObjectDisposedException(null);
 
-			if(uRequestedCount == 0) return MemUtil.EmptyByteArray;
-			if(uRequestedCount > (uint)int.MaxValue)
+			if (uRequestedCount == 0) return MemUtil.EmptyByteArray;
+			if (uRequestedCount > (uint)int.MaxValue)
 				throw new ArgumentOutOfRangeException("uRequestedCount");
 			int cb = (int)uRequestedCount;
 
 			byte[] pbRet = new byte[cb];
 
-			if(m_alg == CrsAlgorithm.ChaCha20)
+			if (m_alg == CrsAlgorithm.ChaCha20)
 				m_chacha20.Encrypt(pbRet, 0, cb);
-			else if(m_alg == CrsAlgorithm.Salsa20)
+			else if (m_alg == CrsAlgorithm.Salsa20)
 				m_salsa20.Encrypt(pbRet, 0, cb);
-			else if(m_alg == CrsAlgorithm.ArcFourVariant)
+			else if (m_alg == CrsAlgorithm.ArcFourVariant)
 			{
 				unchecked
 				{
-					for(int w = 0; w < cb; ++w)
+					for (int w = 0; w < cb; ++w)
 					{
 						++m_i;
 						m_j += m_pbState[m_i];
@@ -233,7 +233,7 @@ namespace KeePassLib.Cryptography
 
 		internal ulong GetRandomUInt64(ulong uMaxExcl)
 		{
-			if(uMaxExcl == 0) { Debug.Assert(false); throw new ArgumentOutOfRangeException("uMaxExcl"); }
+			if (uMaxExcl == 0) { Debug.Assert(false); throw new ArgumentOutOfRangeException("uMaxExcl"); }
 
 			ulong uGen, uRem;
 			do
@@ -241,7 +241,7 @@ namespace KeePassLib.Cryptography
 				uGen = GetRandomUInt64();
 				uRem = uGen % uMaxExcl;
 			}
-			while((uGen - uRem) > (ulong.MaxValue - (uMaxExcl - 1UL)));
+			while ((uGen - uRem) > (ulong.MaxValue - (uMaxExcl - 1UL)));
 			// This ensures that the last number of the block (i.e.
 			// (uGen - uRem) + (uMaxExcl - 1)) is generatable;
 			// for signed longs, overflow to negative number:

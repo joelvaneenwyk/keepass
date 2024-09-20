@@ -17,16 +17,11 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+using KeePassLib.Utility;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Security.Cryptography;
-
-#if !KeePassUAP
-using System.Security.Cryptography;
-#endif
-
-using KeePassLib.Utility;
 
 namespace KeePassLib.Cryptography
 {
@@ -71,7 +66,7 @@ namespace KeePassLib.Cryptography
 
 		public HashingStreamEx(Stream sBaseStream, bool bWriting, HashAlgorithm hashAlgorithm)
 		{
-			if(sBaseStream == null) throw new ArgumentNullException("sBaseStream");
+			if (sBaseStream == null) throw new ArgumentNullException("sBaseStream");
 
 			m_sBaseStream = sBaseStream;
 			m_bWriting = bWriting;
@@ -87,7 +82,7 @@ namespace KeePassLib.Cryptography
 #endif
 
 			// Validate hash algorithm
-			if(!m_hash.CanTransformMultipleBlocks)
+			if (!m_hash.CanTransformMultipleBlocks)
 			{
 				Debug.Assert(false);
 				m_hash = null;
@@ -96,9 +91,9 @@ namespace KeePassLib.Cryptography
 
 		protected override void Dispose(bool disposing)
 		{
-			if(disposing)
+			if (disposing)
 			{
-				if(m_hash != null)
+				if (m_hash != null)
 				{
 					try
 					{
@@ -106,7 +101,7 @@ namespace KeePassLib.Cryptography
 						m_pbFinalHash = m_hash.Hash;
 						m_hash.Clear();
 					}
-					catch(Exception) { Debug.Assert(false); }
+					catch (Exception) { Debug.Assert(false); }
 
 					m_hash = null;
 				}
@@ -136,11 +131,11 @@ namespace KeePassLib.Cryptography
 
 		public override int Read(byte[] pbBuffer, int nOffset, int nCount)
 		{
-			if(m_bWriting) { Debug.Assert(false); throw new InvalidOperationException(); }
+			if (m_bWriting) { Debug.Assert(false); throw new InvalidOperationException(); }
 
 			int nRead = m_sBaseStream.Read(pbBuffer, nOffset, nCount);
 			int nPartialRead = nRead;
-			while((nRead < nCount) && (nPartialRead != 0))
+			while ((nRead < nCount) && (nPartialRead != 0))
 			{
 				nPartialRead = m_sBaseStream.Read(pbBuffer, nOffset + nRead,
 					nCount - nRead);
@@ -152,7 +147,7 @@ namespace KeePassLib.Cryptography
 			Array.Copy(pbBuffer, pbOrg, pbBuffer.Length);
 #endif
 
-			if((m_hash != null) && (nRead > 0))
+			if ((m_hash != null) && (nRead > 0))
 				m_hash.TransformBlock(pbBuffer, nOffset, nRead, pbBuffer, nOffset);
 
 #if DEBUG
@@ -164,14 +159,14 @@ namespace KeePassLib.Cryptography
 
 		public override void Write(byte[] pbBuffer, int nOffset, int nCount)
 		{
-			if(!m_bWriting) { Debug.Assert(false); throw new InvalidOperationException(); }
+			if (!m_bWriting) { Debug.Assert(false); throw new InvalidOperationException(); }
 
 #if DEBUG
 			byte[] pbOrg = new byte[pbBuffer.Length];
 			Array.Copy(pbBuffer, pbOrg, pbBuffer.Length);
 #endif
 
-			if((m_hash != null) && (nCount > 0))
+			if ((m_hash != null) && (nCount > 0))
 				m_hash.TransformBlock(pbBuffer, nOffset, nCount, pbBuffer, nOffset);
 
 #if DEBUG

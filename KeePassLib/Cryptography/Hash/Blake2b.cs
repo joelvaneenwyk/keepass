@@ -20,15 +20,10 @@
 // This implementation is based on the official reference C
 // implementation by Samuel Neves (CC0 1.0 Universal).
 
+using KeePassLib.Utility;
 using System;
 using System.Diagnostics;
 using System.Security.Cryptography;
-
-#if !KeePassUAP
-using System.Security.Cryptography;
-#endif
-
-using KeePassLib.Utility;
 
 namespace KeePassLib.Cryptography.Hash
 {
@@ -81,7 +76,7 @@ namespace KeePassLib.Cryptography.Hash
 
 		public Blake2b(int cbHashLength)
 		{
-			if((cbHashLength < 0) || (cbHashLength > NbMaxOutBytes))
+			if ((cbHashLength < 0) || (cbHashLength > NbMaxOutBytes))
 				throw new ArgumentOutOfRangeException("cbHashLength");
 
 			m_cbHashLength = cbHashLength;
@@ -128,7 +123,7 @@ namespace KeePassLib.Cryptography.Hash
 			ulong[] m = m_m;
 			ulong[] h = m_h;
 
-			for(int i = 0; i < 16; ++i)
+			for (int i = 0; i < 16; ++i)
 				m[i] = MemUtil.BytesToUInt64(pb, iOffset + (i << 3));
 
 			Array.Copy(h, v, 8);
@@ -141,7 +136,7 @@ namespace KeePassLib.Cryptography.Hash
 			v[14] = g_vIV[6] ^ m_f[0];
 			v[15] = g_vIV[7] ^ m_f[1];
 
-			for(int r = 0; r < NbRounds; ++r)
+			for (int r = 0; r < NbRounds; ++r)
 			{
 				int r16 = r << 4;
 
@@ -155,24 +150,24 @@ namespace KeePassLib.Cryptography.Hash
 				G(v, m, r16, 14, 3, 4, 9, 14);
 			}
 
-			for(int i = 0; i < 8; ++i)
+			for (int i = 0; i < 8; ++i)
 				h[i] ^= v[i] ^ v[i + 8];
 		}
 
 		private void IncrementCounter(ulong cb)
 		{
 			m_t[0] += cb;
-			if(m_t[0] < cb) ++m_t[1];
+			if (m_t[0] < cb) ++m_t[1];
 		}
 
 		protected override void HashCore(byte[] array, int ibStart, int cbSize)
 		{
 			Debug.Assert(m_f[0] == 0);
 
-			if((m_cbBuf + cbSize) > NbBlockBytes) // Not '>=' (buffer must not be empty)
+			if ((m_cbBuf + cbSize) > NbBlockBytes) // Not '>=' (buffer must not be empty)
 			{
 				int cbFill = NbBlockBytes - m_cbBuf;
-				if(cbFill > 0) Array.Copy(array, ibStart, m_buf, m_cbBuf, cbFill);
+				if (cbFill > 0) Array.Copy(array, ibStart, m_buf, m_cbBuf, cbFill);
 
 				IncrementCounter((ulong)NbBlockBytes);
 				Compress(m_buf, 0);
@@ -181,7 +176,7 @@ namespace KeePassLib.Cryptography.Hash
 				cbSize -= cbFill;
 				ibStart += cbFill;
 
-				while(cbSize > NbBlockBytes) // Not '>=' (buffer must not be empty)
+				while (cbSize > NbBlockBytes) // Not '>=' (buffer must not be empty)
 				{
 					IncrementCounter((ulong)NbBlockBytes);
 					Compress(array, ibStart);
@@ -191,7 +186,7 @@ namespace KeePassLib.Cryptography.Hash
 				}
 			}
 
-			if(cbSize > 0)
+			if (cbSize > 0)
 			{
 				Debug.Assert((m_cbBuf + cbSize) <= NbBlockBytes);
 
@@ -202,27 +197,27 @@ namespace KeePassLib.Cryptography.Hash
 
 		protected override byte[] HashFinal()
 		{
-			if(m_f[0] != 0) { Debug.Assert(false); throw new InvalidOperationException(); }
+			if (m_f[0] != 0) { Debug.Assert(false); throw new InvalidOperationException(); }
 			Debug.Assert(((m_t[1] == 0) && (m_t[0] == 0)) ||
 				(m_cbBuf > 0)); // Buffer must not be empty for last block processing
 
 			m_f[0] = ulong.MaxValue; // Indicate last block
 
 			int cbFill = NbBlockBytes - m_cbBuf;
-			if(cbFill > 0) Array.Clear(m_buf, m_cbBuf, cbFill);
+			if (cbFill > 0) Array.Clear(m_buf, m_cbBuf, cbFill);
 
 			IncrementCounter((ulong)m_cbBuf);
 			Compress(m_buf, 0);
 
 			byte[] pbHash = new byte[NbMaxOutBytes];
-			for(int i = 0; i < m_h.Length; ++i)
+			for (int i = 0; i < m_h.Length; ++i)
 				MemUtil.UInt64ToBytesEx(m_h[i], pbHash, i << 3);
 
-			if(m_cbHashLength == NbMaxOutBytes) return pbHash;
+			if (m_cbHashLength == NbMaxOutBytes) return pbHash;
 			Debug.Assert(m_cbHashLength < NbMaxOutBytes);
 
 			byte[] pbShort = new byte[m_cbHashLength];
-			if(m_cbHashLength > 0)
+			if (m_cbHashLength > 0)
 				Array.Copy(pbHash, pbShort, m_cbHashLength);
 			MemUtil.ZeroByteArray(pbHash);
 			return pbShort;

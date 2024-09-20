@@ -17,27 +17,22 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Drawing;
-using System.Text;
-using System.Threading;
-using System.Windows.Forms;
-
 using KeePass.App;
 using KeePass.App.Configuration;
 using KeePass.Resources;
 using KeePass.UI;
 using KeePass.Util;
-
 using KeePassLib;
 using KeePassLib.Cryptography.Cipher;
 using KeePassLib.Cryptography.KeyDerivation;
-using KeePassLib.Resources;
 using KeePassLib.Serialization;
 using KeePassLib.Utility;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace KeePass.Forms
 {
@@ -70,13 +65,13 @@ namespace KeePass.Forms
 		{
 			m_bCreatingNew = bCreatingNew;
 
-			Debug.Assert(pwDatabase != null); if(pwDatabase == null) throw new ArgumentNullException("pwDatabase");
+			Debug.Assert(pwDatabase != null); if (pwDatabase == null) throw new ArgumentNullException("pwDatabase");
 			m_pwDatabase = pwDatabase;
 		}
 
 		private void OnFormLoad(object sender, EventArgs e)
 		{
-			if(m_pwDatabase == null) { Debug.Assert(false); throw new InvalidOperationException(); }
+			if (m_pwDatabase == null) { Debug.Assert(false); throw new InvalidOperationException(); }
 
 			m_bInitializing = true;
 
@@ -86,7 +81,7 @@ namespace KeePass.Forms
 			string strDisp = ioc.GetDisplayName();
 
 			string strDesc = KPRes.DatabaseSettingsDesc;
-			if(!string.IsNullOrEmpty(strDisp)) strDesc = strDisp;
+			if (!string.IsNullOrEmpty(strDisp)) strDesc = strDisp;
 
 			BannerFactory.CreateBannerEx(this, m_bannerImage,
 				Properties.Resources.B48x48_Ark, KPRes.DatabaseSettings, strDesc);
@@ -106,7 +101,7 @@ namespace KeePass.Forms
 			m_tbDbName.PromptText = KPRes.DatabaseNamePrompt;
 			m_tbDbDesc.PromptText = KPRes.DatabaseDescPrompt;
 
-			if(m_bCreatingNew) this.Text = KPRes.ConfigureOnNewDatabase3;
+			if (m_bCreatingNew) this.Text = KPRes.ConfigureOnNewDatabase3;
 			else this.Text = KPRes.DatabaseSettings;
 
 			m_tbDbName.Text = m_pwDatabase.Name;
@@ -117,20 +112,20 @@ namespace KeePass.Forms
 
 			Color clr = m_pwDatabase.Color;
 			bool bClr = !UIUtil.ColorsEqual(clr, Color.Empty);
-			if(bClr) m_btnColor.SelectedColor = AppIcons.RoundColor(clr);
+			if (bClr) m_btnColor.SelectedColor = AppIcons.RoundColor(clr);
 			m_cbColor.Checked = bClr;
 
-			for(int inx = 0; inx < CipherPool.GlobalPool.EngineCount; ++inx)
+			for (int inx = 0; inx < CipherPool.GlobalPool.EngineCount; ++inx)
 				m_cmbEncAlgo.Items.Add(CipherPool.GlobalPool[inx].DisplayName);
 
-			if(m_cmbEncAlgo.Items.Count > 0)
+			if (m_cmbEncAlgo.Items.Count > 0)
 			{
 				int nIndex = CipherPool.GlobalPool.GetCipherIndex(m_pwDatabase.DataCipherUuid);
 				m_cmbEncAlgo.SelectedIndex = ((nIndex >= 0) ? nIndex : 0);
 			}
 
 			Debug.Assert(m_cmbKdf.Items.Count == 0);
-			foreach(KdfEngine kdf in KdfPool.Engines)
+			foreach (KdfEngine kdf in KdfPool.Engines)
 			{
 				m_cmbKdf.Items.Add(kdf.Name);
 			}
@@ -162,9 +157,9 @@ namespace KeePass.Forms
 			// m_cbAutoEnableHiding.Checked = m_pwDatabase.MemoryProtection.AutoEnableVisualHiding;
 			// m_cbAutoEnableHiding.Checked = false;
 
-			if(m_pwDatabase.Compression == PwCompressionAlgorithm.None)
+			if (m_pwDatabase.Compression == PwCompressionAlgorithm.None)
 				m_rbCmpNone.Checked = true;
-			else if(m_pwDatabase.Compression == PwCompressionAlgorithm.GZip)
+			else if (m_pwDatabase.Compression == PwCompressionAlgorithm.GZip)
 				m_rbCmpGZip.Checked = true;
 			else { Debug.Assert(false); }
 
@@ -232,14 +227,14 @@ namespace KeePass.Forms
 
 		private void EnableControlsEx()
 		{
-			if(m_bInitializing) return;
+			if (m_bInitializing) return;
 
 			m_btnColor.Enabled = m_cbColor.Checked;
 
 			KdfEngine kdf = GetKdf();
-			if(kdf != null)
+			if (kdf != null)
 			{
-				if(kdf is AesKdf)
+				if (kdf is AesKdf)
 				{
 					m_lblKdfMem.Visible = false;
 					m_numKdfMem.Visible = false;
@@ -248,7 +243,7 @@ namespace KeePass.Forms
 					m_lblKdfPar.Visible = false;
 					m_numKdfPar.Visible = false;
 				}
-				else if(kdf is Argon2Kdf)
+				else if (kdf is Argon2Kdf)
 				{
 					m_lblKdfMem.Visible = true;
 					m_numKdfMem.Visible = true;
@@ -288,7 +283,7 @@ namespace KeePass.Forms
 		{
 			m_pwDatabase.SettingsChanged = DateTime.UtcNow;
 
-			if(m_tbDbName.Text != m_pwDatabase.Name)
+			if (m_tbDbName.Text != m_pwDatabase.Name)
 			{
 				m_pwDatabase.Name = m_tbDbName.Text;
 				m_pwDatabase.NameChanged = DateTime.UtcNow;
@@ -297,13 +292,13 @@ namespace KeePass.Forms
 			string strNew = m_tbDbDesc.Text;
 			string strOrgFlt = StrUtil.NormalizeNewLines(m_pwDatabase.Description, false);
 			string strNewFlt = StrUtil.NormalizeNewLines(strNew, false);
-			if(strNewFlt != strOrgFlt)
+			if (strNewFlt != strOrgFlt)
 			{
 				m_pwDatabase.Description = strNew;
 				m_pwDatabase.DescriptionChanged = DateTime.UtcNow;
 			}
 
-			if(m_tbDefaultUser.Text != m_pwDatabase.DefaultUserName)
+			if (m_tbDefaultUser.Text != m_pwDatabase.DefaultUserName)
 			{
 				m_pwDatabase.DefaultUserName = m_tbDefaultUser.Text;
 				m_pwDatabase.DefaultUserNameChanged = DateTime.UtcNow;
@@ -314,18 +309,18 @@ namespace KeePass.Forms
 
 			int nCipher = CipherPool.GlobalPool.GetCipherIndex(m_cmbEncAlgo.Text);
 			Debug.Assert(nCipher >= 0);
-			if(nCipher >= 0)
+			if (nCipher >= 0)
 				m_pwDatabase.DataCipherUuid = CipherPool.GlobalPool[nCipher].CipherUuid;
 			else
 				m_pwDatabase.DataCipherUuid = StandardAesEngine.AesUuid;
 
 			// m_pwDatabase.KeyEncryptionRounds = (ulong)m_numKdfIt.Value;
 			KdfParameters pKdf = GetKdfParameters(true, true);
-			if(pKdf != null) m_pwDatabase.KdfParameters = pKdf;
+			if (pKdf != null) m_pwDatabase.KdfParameters = pKdf;
 			// No assert, plugins may assign KDF parameters
 
-			if(m_rbCmpNone.Checked) m_pwDatabase.Compression = PwCompressionAlgorithm.None;
-			else if(m_rbCmpGZip.Checked) m_pwDatabase.Compression = PwCompressionAlgorithm.GZip;
+			if (m_rbCmpNone.Checked) m_pwDatabase.Compression = PwCompressionAlgorithm.None;
+			else if (m_rbCmpGZip.Checked) m_pwDatabase.Compression = PwCompressionAlgorithm.GZip;
 			else { Debug.Assert(false); }
 
 			// m_pwDatabase.MemoryProtection.ProtectTitle = UpdateMemoryProtection(0,
@@ -341,15 +336,15 @@ namespace KeePass.Forms
 
 			// m_pwDatabase.MemoryProtection.AutoEnableVisualHiding = m_cbAutoEnableHiding.Checked;
 
-			if(m_cbRecycleBin.Checked != m_pwDatabase.RecycleBinEnabled)
+			if (m_cbRecycleBin.Checked != m_pwDatabase.RecycleBinEnabled)
 			{
 				m_pwDatabase.RecycleBinEnabled = m_cbRecycleBin.Checked;
 				m_pwDatabase.RecycleBinChanged = DateTime.UtcNow;
 			}
 			int iRecBinSel = m_cmbRecycleBin.SelectedIndex;
-			if(m_dictRecycleBinGroups.ContainsKey(iRecBinSel))
+			if (m_dictRecycleBinGroups.ContainsKey(iRecBinSel))
 			{
-				if(!m_dictRecycleBinGroups[iRecBinSel].Equals(m_pwDatabase.RecycleBinUuid))
+				if (!m_dictRecycleBinGroups[iRecBinSel].Equals(m_pwDatabase.RecycleBinUuid))
 				{
 					m_pwDatabase.RecycleBinUuid = m_dictRecycleBinGroups[iRecBinSel];
 					m_pwDatabase.RecycleBinChanged = DateTime.UtcNow;
@@ -358,7 +353,7 @@ namespace KeePass.Forms
 			else
 			{
 				Debug.Assert(false);
-				if(!PwUuid.Zero.Equals(m_pwDatabase.RecycleBinUuid))
+				if (!PwUuid.Zero.Equals(m_pwDatabase.RecycleBinUuid))
 				{
 					m_pwDatabase.RecycleBinUuid = PwUuid.Zero;
 					m_pwDatabase.RecycleBinChanged = DateTime.UtcNow;
@@ -366,9 +361,9 @@ namespace KeePass.Forms
 			}
 
 			int iTemplSel = m_cmbEntryTemplates.SelectedIndex;
-			if(m_dictEntryTemplateGroups.ContainsKey(iTemplSel))
+			if (m_dictEntryTemplateGroups.ContainsKey(iTemplSel))
 			{
-				if(!m_dictEntryTemplateGroups[iTemplSel].Equals(m_pwDatabase.EntryTemplatesGroup))
+				if (!m_dictEntryTemplateGroups[iTemplSel].Equals(m_pwDatabase.EntryTemplatesGroup))
 				{
 					m_pwDatabase.EntryTemplatesGroup = m_dictEntryTemplateGroups[iTemplSel];
 					m_pwDatabase.EntryTemplatesGroupChanged = DateTime.UtcNow;
@@ -377,25 +372,25 @@ namespace KeePass.Forms
 			else
 			{
 				Debug.Assert(false);
-				if(!PwUuid.Zero.Equals(m_pwDatabase.EntryTemplatesGroup))
+				if (!PwUuid.Zero.Equals(m_pwDatabase.EntryTemplatesGroup))
 				{
 					m_pwDatabase.EntryTemplatesGroup = PwUuid.Zero;
 					m_pwDatabase.EntryTemplatesGroupChanged = DateTime.UtcNow;
 				}
 			}
 
-			if(!m_cbHistoryMaxItems.Checked) m_pwDatabase.HistoryMaxItems = -1;
+			if (!m_cbHistoryMaxItems.Checked) m_pwDatabase.HistoryMaxItems = -1;
 			else m_pwDatabase.HistoryMaxItems = (int)m_numHistoryMaxItems.Value;
 
-			if(!m_cbHistoryMaxSize.Checked) m_pwDatabase.HistoryMaxSize = -1;
+			if (!m_cbHistoryMaxSize.Checked) m_pwDatabase.HistoryMaxSize = -1;
 			else m_pwDatabase.HistoryMaxSize = (long)m_numHistoryMaxSize.Value * 1024 * 1024;
 
 			m_pwDatabase.MaintainBackups(); // Apply new history settings
 
-			if(!m_cbKeyRec.Checked) m_pwDatabase.MasterKeyChangeRec = -1;
+			if (!m_cbKeyRec.Checked) m_pwDatabase.MasterKeyChangeRec = -1;
 			else m_pwDatabase.MasterKeyChangeRec = (long)m_numKeyRecDays.Value;
 
-			if(!m_cbKeyForce.Checked) m_pwDatabase.MasterKeyChangeForce = -1;
+			if (!m_cbKeyForce.Checked) m_pwDatabase.MasterKeyChangeForce = -1;
 			else m_pwDatabase.MasterKeyChangeForce = (long)m_numKeyForceDays.Value;
 
 			m_pwDatabase.MasterKeyChangeForceOnce = m_cbKeyForceOnce.Checked;
@@ -427,13 +422,13 @@ namespace KeePass.Forms
 		private void OnBtnHelp(object sender, EventArgs e)
 		{
 			string strSubTopic = null;
-			if(m_tabMain.SelectedTab == m_tabGeneral)
+			if (m_tabMain.SelectedTab == m_tabGeneral)
 				strSubTopic = AppDefs.HelpTopics.DbSettingsGeneral;
-			else if(m_tabMain.SelectedTab == m_tabSecurity)
+			else if (m_tabMain.SelectedTab == m_tabSecurity)
 				strSubTopic = AppDefs.HelpTopics.DbSettingsSecurity;
 			// else if(m_tabMain.SelectedTab == m_tabProtection)
 			//	strSubTopic = AppDefs.HelpTopics.DbSettingsProtection;
-			else if(m_tabMain.SelectedTab == m_tabCompression)
+			else if (m_tabMain.SelectedTab == m_tabCompression)
 				strSubTopic = AppDefs.HelpTopics.DbSettingsCompression;
 
 			AppHelp.ShowHelp(AppDefs.HelpTopics.DatabaseSettings, strSubTopic);
@@ -441,10 +436,10 @@ namespace KeePass.Forms
 
 		private bool AbortKdfThread()
 		{
-			if(m_thKdf == null) return false;
+			if (m_thKdf == null) return false;
 
 			try { m_thKdf.Abort(); }
-			catch(Exception) { Debug.Assert(false); }
+			catch (Exception) { Debug.Assert(false); }
 			m_thKdf = null;
 
 			return true;
@@ -452,7 +447,7 @@ namespace KeePass.Forms
 
 		private void OnFormClosed(object sender, FormClosedEventArgs e)
 		{
-			if(AbortKdfThread()) { Debug.Assert(false); }
+			if (AbortKdfThread()) { Debug.Assert(false); }
 
 			GlobalWindowManager.RemoveWindow(this);
 		}
@@ -495,14 +490,14 @@ namespace KeePass.Forms
 		private KdfParameters GetKdfParameters(bool bShowAdjustments, bool bAdjustWeak)
 		{
 			KdfEngine kdf = GetKdf();
-			if(kdf == null) { Debug.Assert(false); return null; }
+			if (kdf == null) { Debug.Assert(false); return null; }
 
 			string strAdj = string.Empty;
 
 			KdfParameters p = kdf.GetDefaultParameters();
-			if(kdf is AesKdf)
+			if (kdf is AesKdf)
 				p.SetUInt64(AesKdf.ParamRounds, (ulong)m_numKdfIt.Value);
-			else if(kdf is Argon2Kdf)
+			else if (kdf is Argon2Kdf)
 			{
 				ulong uIt = (ulong)m_numKdfIt.Value;
 				AdjustKdfParam<ulong>(ref uIt, ">=", Argon2Kdf.MinIterations,
@@ -517,7 +512,7 @@ namespace KeePass.Forms
 					KPRes.Parallelism, ref strAdj);
 				uint uParMax = Argon2Kdf.MaxParallelism;
 				int cp = Environment.ProcessorCount;
-				if((cp > 0) && (cp <= (int.MaxValue / 2)))
+				if ((cp > 0) && (cp <= (int.MaxValue / 2)))
 					uParMax = Math.Min(uParMax, (uint)(cp * 2));
 				AdjustKdfParam<uint>(ref uPar, "<=", uParMax,
 					KPRes.Parallelism, ref strAdj);
@@ -525,9 +520,9 @@ namespace KeePass.Forms
 
 				ulong uMem = (ulong)m_numKdfMem.Value;
 				int iMemUnit = m_cmbKdfMem.SelectedIndex;
-				while(iMemUnit > 0)
+				while (iMemUnit > 0)
 				{
-					if(uMem > (ulong.MaxValue / 1024UL))
+					if (uMem > (ulong.MaxValue / 1024UL))
 					{
 						uMem = ulong.MaxValue;
 						break;
@@ -548,13 +543,13 @@ namespace KeePass.Forms
 			}
 			else return null; // Plugins may handle it
 
-			if(bShowAdjustments && (strAdj.Length != 0))
+			if (bShowAdjustments && (strAdj.Length != 0))
 			{
 				strAdj = KPRes.KdfAdjust + MessageService.NewParagraph + strAdj;
 				MessageService.ShowInfo(strAdj);
 			}
 
-			if(bAdjustWeak) KeyUtil.KdfAdjustWeakParameters(ref p, null);
+			if (bAdjustWeak) KeyUtil.KdfAdjustWeakParameters(ref p, null);
 
 			return p;
 		}
@@ -563,17 +558,17 @@ namespace KeePass.Forms
 			T tCmp, string strName, ref string strAdj)
 			where T : struct, IComparable<T>
 		{
-			if(strReq == ">=")
+			if (strReq == ">=")
 			{
-				if(tValue.CompareTo(tCmp) >= 0) return;
+				if (tValue.CompareTo(tCmp) >= 0) return;
 			}
-			else if(strReq == "<=")
+			else if (strReq == "<=")
 			{
-				if(tValue.CompareTo(tCmp) <= 0) return;
+				if (tValue.CompareTo(tCmp) <= 0) return;
 			}
 			else { Debug.Assert(false); return; }
 
-			if(strAdj.Length > 0)
+			if (strAdj.Length > 0)
 				strAdj += MessageService.NewLine;
 			strAdj += "* " + strName + ": " + tValue.ToString() +
 				" -> " + tCmp.ToString() + ".";
@@ -583,17 +578,17 @@ namespace KeePass.Forms
 
 		private void SetKdfParameters(KdfParameters p)
 		{
-			if(p == null) { Debug.Assert(false); return; }
+			if (p == null) { Debug.Assert(false); return; }
 
 			KdfEngine kdf = KdfPool.Get(p.KdfUuid);
-			if(kdf == null) { Debug.Assert(false); return; }
+			if (kdf == null) { Debug.Assert(false); return; }
 
-			for(int i = 0; i < m_cmbKdf.Items.Count; ++i)
+			for (int i = 0; i < m_cmbKdf.Items.Count; ++i)
 			{
 				string strKdf = (m_cmbKdf.Items[i] as string);
-				if(string.IsNullOrEmpty(strKdf)) { Debug.Assert(false); continue; }
+				if (string.IsNullOrEmpty(strKdf)) { Debug.Assert(false); continue; }
 
-				if(strKdf.Equals(kdf.Name, StrUtil.CaseIgnoreCmp))
+				if (strKdf.Equals(kdf.Name, StrUtil.CaseIgnoreCmp))
 				{
 					bool bPrevInit = m_bInitializing;
 					m_bInitializing = true; // Prevent selection handler
@@ -605,13 +600,13 @@ namespace KeePass.Forms
 				}
 			}
 
-			if(kdf is AesKdf)
+			if (kdf is AesKdf)
 			{
 				ulong uIt = p.GetUInt64(AesKdf.ParamRounds,
 					PwDefs.DefaultKeyEncryptionRounds);
 				SetKdfParameters(uIt, 1024, 2);
 			}
-			else if(kdf is Argon2Kdf)
+			else if (kdf is Argon2Kdf)
 			{
 				ulong uIt = p.GetUInt64(Argon2Kdf.ParamIterations,
 					Argon2Kdf.DefaultIterations);
@@ -629,19 +624,19 @@ namespace KeePass.Forms
 			m_numKdfIt.Value = uIt;
 
 			int nUnits = m_cmbKdfMem.Items.Count;
-			if((nUnits == 0) || (uMem == 0))
+			if ((nUnits == 0) || (uMem == 0))
 			{
 				m_numKdfMem.Value = uMem;
-				if(nUnits > 0) m_cmbKdfMem.SelectedIndex = 0;
+				if (nUnits > 0) m_cmbKdfMem.SelectedIndex = 0;
 				else { Debug.Assert(false); }
 				return;
 			}
 
 			ulong uMemWrtUnit = uMem;
 			int iUnit = 0;
-			while(iUnit < (nUnits - 1))
+			while (iUnit < (nUnits - 1))
 			{
-				if((uMemWrtUnit % 1024UL) != 0UL) break;
+				if ((uMemWrtUnit % 1024UL) != 0UL) break;
 
 				uMemWrtUnit /= 1024UL;
 				++iUnit;
@@ -655,10 +650,10 @@ namespace KeePass.Forms
 
 		private void OnKdfSelectedIndexChanged(object sender, EventArgs e)
 		{
-			if(m_bInitializing) return;
+			if (m_bInitializing) return;
 
 			KdfEngine kdf = GetKdf();
-			if(kdf == null) { Debug.Assert(false); return; }
+			if (kdf == null) { Debug.Assert(false); return; }
 
 			SetKdfParameters(kdf.GetDefaultParameters());
 			EnableControlsEx();
@@ -667,10 +662,10 @@ namespace KeePass.Forms
 		private void OnBtnKdf1Sec(object sender, EventArgs e)
 		{
 			KdfEngine kdf = GetKdf();
-			if(kdf == null) { Debug.Assert(false); return; }
+			if (kdf == null) { Debug.Assert(false); return; }
 
-			if(!(kdf is AesKdf) && !(kdf is Argon2Kdf)) return; // No assert, plugins
-			if(m_thKdf != null) { Debug.Assert(false); return; }
+			if (!(kdf is AesKdf) && !(kdf is Argon2Kdf)) return; // No assert, plugins
+			if (m_thKdf != null) { Debug.Assert(false); return; }
 
 			try
 			{
@@ -679,7 +674,7 @@ namespace KeePass.Forms
 
 				m_thKdf.Start(kdf);
 			}
-			catch(Exception)
+			catch (Exception)
 			{
 				Debug.Assert(false);
 				m_thKdf = null;
@@ -695,16 +690,16 @@ namespace KeePass.Forms
 			try
 			{
 				KdfEngine kdf = (o as KdfEngine);
-				if(kdf != null) p = kdf.GetBestParameters(1000);
+				if (kdf != null) p = kdf.GetBestParameters(1000);
 				else { Debug.Assert(false); }
 			}
-			catch(ThreadAbortException)
+			catch (ThreadAbortException)
 			{
 				try { Thread.ResetAbort(); }
-				catch(Exception) { Debug.Assert(false); }
+				catch (Exception) { Debug.Assert(false); }
 				return;
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				Debug.Assert(false);
 				strMsg = StrUtil.FormatException(ex, null);
@@ -712,7 +707,7 @@ namespace KeePass.Forms
 			finally { m_thKdf = null; } // Before continuation, to enable controls
 
 			try { m_btnOK.Invoke(new KdfpDelegate(this.Kdf1SecPost), p, strMsg); }
-			catch(Exception) { Debug.Assert(false); }
+			catch (Exception) { Debug.Assert(false); }
 		}
 
 		private delegate void KdfpDelegate(KdfParameters p, string strMsg);
@@ -723,21 +718,21 @@ namespace KeePass.Forms
 			{
 				Debug.Assert(!m_btnOK.InvokeRequired);
 
-				if(!string.IsNullOrEmpty(strMsg))
+				if (!string.IsNullOrEmpty(strMsg))
 					MessageService.ShowInfo(strMsg);
 				else SetKdfParameters(p);
 
 				EnableControlsEx();
 			}
-			catch(Exception) { Debug.Assert(false); }
+			catch (Exception) { Debug.Assert(false); }
 		}
 
 		private void OnBtnKdfTest(object sender, EventArgs e)
 		{
 			KdfParameters p = GetKdfParameters(true, false);
-			if(p == null) return; // No assert, plugins
+			if (p == null) return; // No assert, plugins
 
-			if(m_thKdf != null) { Debug.Assert(false); return; }
+			if (m_thKdf != null) { Debug.Assert(false); return; }
 
 			try
 			{
@@ -748,7 +743,7 @@ namespace KeePass.Forms
 
 				m_thKdf.Start(p);
 			}
-			catch(Exception)
+			catch (Exception)
 			{
 				Debug.Assert(false);
 				m_thKdf = null;
@@ -763,28 +758,28 @@ namespace KeePass.Forms
 			try
 			{
 				KdfParameters p = (o as KdfParameters);
-				if(p == null) { Debug.Assert(false); return; }
+				if (p == null) { Debug.Assert(false); return; }
 
 				KdfEngine kdf = KdfPool.Get(p.KdfUuid);
-				if(kdf == null) { Debug.Assert(false); return; }
+				if (kdf == null) { Debug.Assert(false); return; }
 
 				ulong uTimeMS;
-				if(!KeyUtil.KdfPrcTest(p, out uTimeMS))
+				if (!KeyUtil.KdfPrcTest(p, out uTimeMS))
 					uTimeMS = kdf.Test(p);
 
-				if(uTimeMS == 0) uTimeMS = 1;
+				if (uTimeMS == 0) uTimeMS = 1;
 				double dTimeS = (double)uTimeMS / 1000.0;
 
 				strMsg = KPRes.TestSuccess + MessageService.NewParagraph +
 					KPRes.TransformTime.Replace(@"{PARAM}", dTimeS.ToString());
 			}
-			catch(ThreadAbortException)
+			catch (ThreadAbortException)
 			{
 				try { Thread.ResetAbort(); }
-				catch(Exception) { Debug.Assert(false); }
+				catch (Exception) { Debug.Assert(false); }
 				return;
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				Debug.Assert(false);
 				strMsg = StrUtil.FormatException(ex, null);
@@ -792,7 +787,7 @@ namespace KeePass.Forms
 			finally { m_thKdf = null; } // Before continuation, to enable controls
 
 			try { m_btnOK.Invoke(new KdfsDelegate(this.KdfTestPost), strMsg); }
-			catch(Exception) { Debug.Assert(false); }
+			catch (Exception) { Debug.Assert(false); }
 		}
 
 		private delegate void KdfsDelegate(string strMsg);
@@ -805,11 +800,11 @@ namespace KeePass.Forms
 
 				EnableControlsEx();
 
-				if(!string.IsNullOrEmpty(strMsg))
+				if (!string.IsNullOrEmpty(strMsg))
 					MessageService.ShowInfo(strMsg);
 				else { Debug.Assert(false); }
 			}
-			catch(Exception) { Debug.Assert(false); }
+			catch (Exception) { Debug.Assert(false); }
 		}
 
 		private void OnBtnCancelOp(object sender, EventArgs e)

@@ -17,15 +17,13 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+using KeePass.Resources;
+using KeePassLib.Utility;
 using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Forms;
-
-using KeePass.Resources;
-
-using KeePassLib.Utility;
 
 namespace KeePass.UI
 {
@@ -40,7 +38,7 @@ namespace KeePass.UI
 		{
 			get { return m_nColumn; }
 
-			/// Only provided for XML serialization, do not use
+			// Only provided for XML serialization, do not use
 			set { m_nColumn = value; }
 		}
 
@@ -49,7 +47,7 @@ namespace KeePass.UI
 		{
 			get { return m_oSort; }
 
-			/// Only provided for XML serialization, do not use
+			// Only provided for XML serialization, do not use
 			set { m_oSort = value; }
 		}
 
@@ -59,7 +57,7 @@ namespace KeePass.UI
 		{
 			get { return m_bCompareNaturally; }
 
-			/// Only provided for XML serialization, do not use
+			// Only provided for XML serialization, do not use
 			set { m_bCompareNaturally = value; }
 		}
 
@@ -69,7 +67,7 @@ namespace KeePass.UI
 		{
 			get { return m_bCompareTimes; }
 
-			/// Only provided for XML serialization, do not use
+			// Only provided for XML serialization, do not use
 			set { m_bCompareTimes = value; }
 		}
 
@@ -83,7 +81,7 @@ namespace KeePass.UI
 			m_nColumn = nColumn;
 
 			Debug.Assert(sortOrder != SortOrder.None);
-			if(sortOrder != SortOrder.None) m_oSort = sortOrder;
+			if (sortOrder != SortOrder.None) m_oSort = sortOrder;
 
 			m_bCompareNaturally = bCompareNaturally;
 			m_bCompareTimes = bCompareTimes;
@@ -97,7 +95,7 @@ namespace KeePass.UI
 
 			string strL, strR;
 			Debug.Assert(lviX.SubItems.Count == lviY.SubItems.Count);
-			if((m_nColumn <= 0) || (lviX.SubItems.Count <= m_nColumn) ||
+			if ((m_nColumn <= 0) || (lviX.SubItems.Count <= m_nColumn) ||
 				(lviY.SubItems.Count <= m_nColumn))
 			{
 				strL = lviX.Text;
@@ -109,9 +107,9 @@ namespace KeePass.UI
 				strR = lviY.SubItems[m_nColumn].Text;
 			}
 
-			if(m_bCompareTimes)
+			if (m_bCompareTimes)
 			{
-				if((strL == m_strNeverExpires) || (strR == m_strNeverExpires))
+				if ((strL == m_strNeverExpires) || (strR == m_strNeverExpires))
 					return string.Compare(strL, strR, true);
 
 				DateTime dtL = TimeUtil.FromDisplayString(strL);
@@ -120,7 +118,7 @@ namespace KeePass.UI
 				return dtL.CompareTo(dtR);
 			}
 
-			if(m_bCompareNaturally) return StrUtil.CompareNaturally(strL, strR);
+			if (m_bCompareNaturally) return StrUtil.CompareNaturally(strL, strR);
 			return string.Compare(strL, strR, true);
 		}
 	}
