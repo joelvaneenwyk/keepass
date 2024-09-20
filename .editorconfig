@@ -14,10 +14,9 @@ indent_size = 4
 indent_style = tab
 tab_width = 4
 
-[*.{csproj,props}]
+[*.{csproj,Build.props,pubxml}]
 indent_size = 2
 indent_style = space
-
 
 [*.{yml,yaml}]
 indent_size = 2

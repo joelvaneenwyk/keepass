@@ -420,7 +420,8 @@ namespace KeePass.Util
 			if (string.IsNullOrEmpty(str))
 			{
 				str = Assembly.GetExecutingAssembly().GetName().CodeBase;
-				str = UrlUtil.FileUrlToPath(str);
+				try { str = UrlUtil.FileUrlToPath(str); }
+				catch (Exception) { }
 			}
 
 			g_strExePath = str;

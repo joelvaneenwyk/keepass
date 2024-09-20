@@ -1,83 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0"
-    xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <!-- Set Default Properties -->
-    <PropertyGroup>
-        <!--
+  xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- Set Default Properties -->
+  <PropertyGroup>
+    <!--
         See: https://learn.microsoft.com/en-us/visualstudio/msbuild/customize-your-build?view=vs-2022
         -->
-        <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
 
-        <!-- SolutionDir is not defined when building projects explicitly -->
-        <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
-    </PropertyGroup>
+    <!-- SolutionDir is not defined when building projects explicitly -->
+    <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
+  </PropertyGroup>
 
-    <PropertyGroup>
-        <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-        <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-        <TargetFramework>net462</TargetFramework>
-        <Nullable>disable</Nullable>
-        <ImplicitUsings>disable</ImplicitUsings>
-    </PropertyGroup>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
 
-    <ItemGroup>
-        <!-- use 'PackageVersion' rather than 'PackageReference' -->
-        <PackageVersion Include="KeePass" Version="2.57.0.28775" />
-        <PackageVersion Include="System.Resources.Extensions" Version="8.0.0" />
-    </ItemGroup>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <TargetFramework>net462</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+  </PropertyGroup>
 
-    <!-- Set Folder Variables -->
-    <PropertyGroup>
-        <WorkspaceFolder>$(MSBuildThisFileDirectory.TrimEnd('\/'))</WorkspaceFolder>
-        <OutNoSlash>$(WorkspaceFolder)/Build/$(MSBuildProjectName)/$(Configuration)</OutNoSlash>
-        <IntNoSlash>$(WorkspaceFolder)/.build/$(MSBuildProjectName)/$(Configuration)/$(Platform)$(TargetArchitecture)</IntNoSlash>
-    </PropertyGroup>
+  <ItemGroup>
+    <!-- use 'PackageVersion' rather than 'PackageReference' -->
+    <PackageVersion Include="System.Resources.Extensions" Version="8.0.0" />
+    <PackageVersion Include="DotNet.ReproducibleBuilds" Version="1.2.25" />
+  </ItemGroup>
 
-    <!-- Set Base Variables -->
-    <PropertyGroup>
-        <ProjectUrl>https://github.com/joelvaneenwyk/keepass</ProjectUrl>
+  <ItemGroup>
+    <PackageReference Include="DotNet.ReproducibleBuilds" PrivateAssets="All" />
+  </ItemGroup>
 
-        <!-- SolutionDir is not defined when building projects explicitly -->
-        <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">$(WorkspaceFolder)</SolutionDir>
-        <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
-        <VSToolsPath Condition="'$(VSToolsPath)' == '' and Exists('$(MSBuildExtensionsPath32)/Microsoft/VisualStudio/v$(VisualStudioVersion)')">
-            $(MSBuildExtensionsPath32)/Microsoft/VisualStudio/v$(VisualStudioVersion)
-        </VSToolsPath>
-    </PropertyGroup>
+  <!-- Set Folder Variables -->
+  <PropertyGroup>
+    <WorkspaceFolder>$(MSBuildThisFileDirectory.TrimEnd('\/'))</WorkspaceFolder>
+    <OutNoSlash>$(WorkspaceFolder)/Build/$(MSBuildProjectName)/$(Configuration)</OutNoSlash>
+    <IntNoSlash>$(WorkspaceFolder)/.build/$(MSBuildProjectName)/$(Configuration)/$(Platform)$(TargetArchitecture)</IntNoSlash>
+  </PropertyGroup>
 
-    <!-- Normalize Output Paths -->
-    <PropertyGroup>
-        <OutputPath>$([System.IO.Path]::Combine($(OutNoSlash),$(DirectorySeparatorChar)))</OutputPath>
-        <IntermediateOutputPath>$([System.IO.Path]::Combine($(IntNoSlash),$(DirectorySeparatorChar)))</IntermediateOutputPath>
-    </PropertyGroup>
+  <!-- Set Base Variables -->
+  <PropertyGroup>
+    <ProjectUrl>https://github.com/joelvaneenwyk/keepass</ProjectUrl>
 
-    <!-- Set Base Paths -->
-    <PropertyGroup>
-        <!--
+    <!-- SolutionDir is not defined when building projects explicitly -->
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">$(WorkspaceFolder)</SolutionDir>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == '' and Exists('$(MSBuildExtensionsPath32)/Microsoft/VisualStudio/v$(VisualStudioVersion)')">
+      $(MSBuildExtensionsPath32)/Microsoft/VisualStudio/v$(VisualStudioVersion)
+    </VSToolsPath>
+  </PropertyGroup>
+
+  <!-- Normalize Output Paths -->
+  <PropertyGroup>
+    <OutputPath>$([System.IO.Path]::Combine($(OutNoSlash),$(DirectorySeparatorChar)))</OutputPath>
+    <IntermediateOutputPath>$([System.IO.Path]::Combine($(IntNoSlash),$(DirectorySeparatorChar)))</IntermediateOutputPath>
+  </PropertyGroup>
+
+  <!-- Set Base Paths -->
+  <PropertyGroup>
+    <!--
         We intentionally do NOT set 'OutDir' and 'IntDir' since we would rather rely on
         internal implementation to set these.
         -->
-        <BaseOutputPath>$(OutputPath)</BaseOutputPath>
-        <BaseIntermediateOutputPath>$(IntermediateOutputPath)</BaseIntermediateOutputPath>
+    <BaseOutputPath>$(OutputPath)</BaseOutputPath>
+    <BaseIntermediateOutputPath>$(IntermediateOutputPath)</BaseIntermediateOutputPath>
 
-        <DocumentationFile>$(IntNoSlash)/$(MSBuildProjectName).xml</DocumentationFile>
+    <DocumentationFile>$(IntNoSlash)/$(MSBuildProjectName).xml</DocumentationFile>
 
-        <TransformOnBuild>true</TransformOnBuild>
-        <OverwriteReadOnlyOutputFiles>true</OverwriteReadOnlyOutputFiles>
-        <TransformOutOfDateOnly>true</TransformOutOfDateOnly>
+    <TransformOnBuild>true</TransformOnBuild>
+    <OverwriteReadOnlyOutputFiles>true</OverwriteReadOnlyOutputFiles>
+    <TransformOutOfDateOnly>true</TransformOutOfDateOnly>
 
-        <PreserveCompilationContext>true</PreserveCompilationContext>
-        <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
-        <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
-        <Deterministic>true</Deterministic>
-        <UseCommonOutputDirectory>false</UseCommonOutputDirectory>
-        <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-        <NoWarn>
-      $(NoWarn);SYSLIB0021;SYSLIB0001;SYSLIB0006;SYSLIB0023;SYSLIB0044;SYSLIB0022;NU1701;1591;CA1852;CA1416;CA1822;CA1305;CA1304;CA1309;CA1310;CA1507;CA1712;CA1806;CA1825;CA1834;CA1838;CA1845;CA1846;CA1847;CA1853;CA1854;CA1861;CA1863;CA1864;CA1865;CA1866;CA2022;CA2101;CA2201;CA2249;CA2251;CA2263;CA5364;CS8600;CS8601;CS8602;CS8603;CS8604;CS8618;CS8622;CS8625;CS8629;CS8630;CS8765;NETSDK1005;SYSLIB0003;SYSLIB0004;SYSLIB0014;WFAC010
-        </NoWarn>
-        <DebugType>embedded</DebugType>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
+    <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <Deterministic>true</Deterministic>
+    <UseCommonOutputDirectory>false</UseCommonOutputDirectory>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
 
-        <ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
-        <ForceDesignerDpiUnaware>true</ForceDesignerDpiUnaware>
-    </PropertyGroup>
+    <NoWarn>
+      $(NoWarn);
+      CS1591;
+      CA1852;CA1416;CA1822;CA1305;CA1304;CA1309;CA1310;
+      NU1604;NU1701;
+      NETSDK1005;
+      WFAC010;
+      SYSLIB0021;SYSLIB0004;SYSLIB0014;SYSLIB0001;SYSLIB0006;SYSLIB0023;SYSLIB0044;SYSLIB0022;SYSLIB0003;
+    </NoWarn>
+    <DebugType>embedded</DebugType>
+
+    <ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
+    <ForceDesignerDpiUnaware>true</ForceDesignerDpiUnaware>
+  </PropertyGroup>
 </Project>
