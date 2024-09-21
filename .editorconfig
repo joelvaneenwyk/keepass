@@ -9,15 +9,15 @@ indent_size = 4
 trim_trailing_whitespace = true
 insert_final_newline = true
 
-[*.{cs,vb}]
+[*.{cs,vb,cpp}]
 indent_size = 4
 indent_style = tab
 tab_width = 4
 
-[*.{csproj,Build.props,pubxml}]
+[{*.csproj,Directory.Build.props,*.pubxml,*.vcxproj}]
 indent_size = 2
 indent_style = space
 
-[*.{yml,yaml}]
+[{*.yml,*.yaml,.clang-format,.clangd}]
 indent_size = 2
 indent_style = space
