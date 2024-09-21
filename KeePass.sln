@@ -24,6 +24,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "{global}", "{global}", "{B1
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfflinePasswordCheck", "Plugins\OfflinePasswordCheck\OfflinePasswordCheck\OfflinePasswordCheck.csproj", "{0F79E8F5-54A9-4ACE-AE73-6D3C9045B422}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ShInstUtil", "ShInstUtil\ShInstUtil.vcxproj", "{C9FBA6FD-04AC-4B2F-8277-B852B8013DAE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{A90065D4-9690-4310-99D8-7A37C07B93F5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -46,6 +50,10 @@ Global
 		{0F79E8F5-54A9-4ACE-AE73-6D3C9045B422}.Debug|x64.Build.0 = Debug|x64
 		{0F79E8F5-54A9-4ACE-AE73-6D3C9045B422}.Release|x64.ActiveCfg = Release|x64
 		{0F79E8F5-54A9-4ACE-AE73-6D3C9045B422}.Release|x64.Build.0 = Release|x64
+		{C9FBA6FD-04AC-4B2F-8277-B852B8013DAE}.Debug|x64.ActiveCfg = Debug|x64
+		{C9FBA6FD-04AC-4B2F-8277-B852B8013DAE}.Debug|x64.Build.0 = Debug|x64
+		{C9FBA6FD-04AC-4B2F-8277-B852B8013DAE}.Release|x64.ActiveCfg = Release|x64
+		{C9FBA6FD-04AC-4B2F-8277-B852B8013DAE}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -54,6 +62,7 @@ Global
 		{53573E4E-33CB-4FDB-8698-C95F5E40E7F3} = {71901B12-FAE3-4653-B143-767DEB5AAE75}
 		{B7E890E7-BF50-4450-9A52-C105BD98651C} = {71901B12-FAE3-4653-B143-767DEB5AAE75}
 		{0F79E8F5-54A9-4ACE-AE73-6D3C9045B422} = {F8B54EC5-C1FB-4567-A8D2-A78CF93B34FE}
+		{C9FBA6FD-04AC-4B2F-8277-B852B8013DAE} = {A90065D4-9690-4310-99D8-7A37C07B93F5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C7DF29C5-EE0E-4928-B820-9F0CC419EA5C}
