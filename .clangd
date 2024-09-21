@@ -1,0 +1,5 @@
+CompileFlags:
+  Add:
+    # cspell:ignore Ivcpkg,isystem
+    - -isystem=./vcpkg_installed/x64-windows/include/
+    - -I./vcpkg_installed/x64-windows/include/
