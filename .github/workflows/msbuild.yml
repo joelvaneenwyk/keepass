@@ -20,12 +20,19 @@ permissions:
 
 jobs:
   build:
-    name: 'Build // ${{ matrix.configuration }}'
+    name: 'Build // ${{ matrix.configuration }} // ${{ matrix.project.name }}'
     runs-on: windows-latest
     strategy:
       fail-fast: false
       matrix:
         configuration: [Release, Debug]
+        project:
+          - name: KeePass
+            path: KeePass/KeePass.csproj
+          - name: KeePassLib
+            path: KeePassLib/KeePassLib.csproj,
+          - name: OfflinePasswordCheck
+            path: Plugins/OfflinePasswordCheck/OfflinePasswordCheck.sln
 
     steps:
     - uses: actions/checkout@v4
@@ -40,5 +47,5 @@ jobs:
     - name: Restore Packages
       run: dotnet restore
 
-    - name: Build
-      run: dotnet build --configuration "${{ matrix.configuration }}"
+    - name: Build ${{ matrix.project.name}}
+      run: dotnet build --configuration "${{ matrix.configuration }}" --project "${{ matrix.project.path }}"
