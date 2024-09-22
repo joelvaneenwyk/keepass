@@ -45,7 +45,7 @@ jobs:
         dotnet-version: '8.x'
 
     - name: Restore Packages
-      run: dotnet restore
+      run: dotnet restore "${{ matrix.project.path }}"
 
     - name: Build ${{ matrix.project.name}}
       run: dotnet build "${{ matrix.project.path }}" --configuration "${{ matrix.configuration }}"
