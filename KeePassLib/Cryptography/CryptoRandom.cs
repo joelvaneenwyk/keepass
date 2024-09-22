@@ -27,7 +27,10 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Security.Cryptography;
+
+#if !KeePassUAP
 using System.Windows.Forms;
+#endif
 
 namespace KeePassLib.Cryptography
 {
@@ -182,7 +185,7 @@ namespace KeePassLib.Cryptography
 			fI32(Environment.TickCount);
 			fI64(DateTime.UtcNow.ToBinary());
 
-#if !KeePassLibSD
+#if !KeePassLibSD && !KeePassUAP
 			// In try-catch for systems without GUI;
 			// https://sourceforge.net/p/keepass/discussion/329221/thread/20335b73/
 			try

@@ -22,9 +22,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Text;
 
-#if !KeePassUAP
+#if KeePassUAP
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
+#else
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -74,7 +77,7 @@ namespace KeePassLib.Utility
 #if KeePassUAP
 		public static Image LoadImage(byte[] pb)
 		{
-			if(pb == null) throw new ArgumentNullException("pb");
+			if (pb == null) throw new ArgumentNullException("pb");
 
 			MemoryStream ms = new MemoryStream(pb, false);
 			try { return Image.FromStream(ms); }
@@ -435,7 +438,7 @@ namespace KeePassLib.Utility
 
 		internal static void SetHighQuality(Graphics g)
 		{
-			if(g == null) { Debug.Assert(false); return; }
+			if (g == null) { Debug.Assert(false); return; }
 
 			g.CompositingQuality = CompositingQuality.HighQuality;
 			g.InterpolationMode = InterpolationMode.HighQualityBicubic;
@@ -445,10 +448,10 @@ namespace KeePassLib.Utility
 
 		internal static string ImageToDataUri(Image img)
 		{
-			if(img == null) { Debug.Assert(false); return string.Empty; }
+			if (img == null) { Debug.Assert(false); return string.Empty; }
 
 			byte[] pb = null;
-			using(MemoryStream ms = new MemoryStream())
+			using (MemoryStream ms = new MemoryStream())
 			{
 				img.Save(ms, ImageFormat.Png);
 				pb = ms.ToArray();
@@ -460,18 +463,18 @@ namespace KeePassLib.Utility
 		internal static ulong HashImage64(Image img)
 		{
 			Bitmap bmp = (img as Bitmap);
-			if(bmp == null) { Debug.Assert(false); return 0; }
+			if (bmp == null) { Debug.Assert(false); return 0; }
 
 			BitmapData bd = null;
 			try
 			{
 				int w = bmp.Width, h = bmp.Height;
-				if((w <= 0) || (h <= 0)) { Debug.Assert(false); return 0; }
+				if ((w <= 0) || (h <= 0)) { Debug.Assert(false); return 0; }
 
 				bd = bmp.LockBits(new Rectangle(0, 0, w, h),
 					ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
 
-				if(bd.Stride != (w * 4)) { Debug.Assert(false); return 0; }
+				if (bd.Stride != (w * 4)) { Debug.Assert(false); return 0; }
 
 				Debug.Assert(Marshal.SizeOf(typeof(int)) == 4);
 				int cp = w * h;
@@ -482,10 +485,10 @@ namespace KeePassLib.Utility
 
 				return MemUtil.Hash64(v, 0, v.Length);
 			}
-			catch(Exception) { Debug.Assert(false); }
+			catch (Exception) { Debug.Assert(false); }
 			finally
 			{
-				if(bd != null) bmp.UnlockBits(bd);
+				if (bd != null) bmp.UnlockBits(bd);
 			}
 
 			return 0;
@@ -493,27 +496,27 @@ namespace KeePassLib.Utility
 
 		private static void NormalizeOrientation(Image img)
 		{
-			if(img == null) { Debug.Assert(false); return; }
+			if (img == null) { Debug.Assert(false); return; }
 
 			try
 			{
 				int[] v = img.PropertyIdList;
-				if(v == null) { Debug.Assert(false); return; }
-				if(Array.IndexOf<int>(v, ExifOrientation) < 0) return;
+				if (v == null) { Debug.Assert(false); return; }
+				if (Array.IndexOf<int>(v, ExifOrientation) < 0) return;
 
 				PropertyItem pi = img.GetPropertyItem(ExifOrientation);
-				if(pi == null) { Debug.Assert(false); return; }
-				if(pi.Type != ExifTypeUInt16) { Debug.Assert(false); return; }
+				if (pi == null) { Debug.Assert(false); return; }
+				if (pi.Type != ExifTypeUInt16) { Debug.Assert(false); return; }
 
 				byte[] pb = pi.Value;
-				if(pb == null) { Debug.Assert(false); return; }
-				if(pb.Length != 2) { Debug.Assert(false); return; }
+				if (pb == null) { Debug.Assert(false); return; }
+				if (pb.Length != 2) { Debug.Assert(false); return; }
 
 				// Exif supports both LE and BE; use arch.-dep. BitConverter
 				ushort u = BitConverter.ToUInt16(pb, 0);
 				bool bRemoveProp = true;
 
-				switch(u)
+				switch (u)
 				{
 					case ExifOrientationTL:
 						bRemoveProp = false;
@@ -545,9 +548,9 @@ namespace KeePassLib.Utility
 						break;
 				}
 
-				if(bRemoveProp) img.RemovePropertyItem(ExifOrientation);
+				if (bRemoveProp) img.RemovePropertyItem(ExifOrientation);
 			}
-			catch(Exception) { Debug.Assert(false); }
+			catch (Exception) { Debug.Assert(false); }
 		}
 
 		// Compatible with System.Drawing.FontConverter
@@ -555,7 +558,7 @@ namespace KeePassLib.Utility
 		{
 			string str;
 
-			switch(gu)
+			switch (gu)
 			{
 				case GraphicsUnit.Display: str = "display"; break;
 				case GraphicsUnit.Document: str = "doc"; break;

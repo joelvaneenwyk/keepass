@@ -29,6 +29,16 @@ using KeePassLib.Utility;
 
 namespace KeePassLib
 {
+#if KeePassUAP
+	public class Image
+	{
+	}
+
+	public class Color
+	{
+	}
+#endif
+
 	public sealed class PwCustomIcon
 	{
 		// Recommended maximum sizes, not obligatory
@@ -59,7 +69,7 @@ namespace KeePassLib
 			get { return m_strName; }
 			set
 			{
-				if(value == null) throw new ArgumentNullException("value");
+				if (value == null) throw new ArgumentNullException("value");
 				m_strName = value;
 			}
 		}
@@ -82,9 +92,9 @@ namespace KeePassLib
 
 		public PwCustomIcon(PwUuid pu, byte[] pbImageDataPng)
 		{
-			if(pu == null) { Debug.Assert(false); throw new ArgumentNullException("pu"); }
-			if(pu.Equals(PwUuid.Zero)) { Debug.Assert(false); throw new ArgumentOutOfRangeException("pu"); }
-			if(pbImageDataPng == null) { Debug.Assert(false); throw new ArgumentNullException("pbImageDataPng"); }
+			if (pu == null) { Debug.Assert(false); throw new ArgumentNullException("pu"); }
+			if (pu.Equals(PwUuid.Zero)) { Debug.Assert(false); throw new ArgumentOutOfRangeException("pu"); }
+			if (pbImageDataPng == null) { Debug.Assert(false); throw new ArgumentNullException("pbImageDataPng"); }
 
 			m_uuid = pu;
 			m_pbImageDataPng = pbImageDataPng;
@@ -103,10 +113,10 @@ namespace KeePassLib
 			const long lKey = -1;
 
 			Image img;
-			if(m_dImageCache.TryGetValue(lKey, out img)) return img;
+			if (m_dImageCache.TryGetValue(lKey, out img)) return img;
 
 			try { img = GfxUtil.LoadImage(m_pbImageDataPng); }
-			catch(Exception) { Debug.Assert(false); }
+			catch (Exception) { Debug.Assert(false); }
 
 			m_dImageCache[lKey] = img;
 			return img;
