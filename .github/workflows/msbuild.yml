@@ -31,7 +31,7 @@ jobs:
           - name: KeePassLib
             path: KeePassLib/KeePassLib.csproj
           - name: OfflinePasswordCheck
-            path: Plugins/OfflinePasswordCheck/OfflinePasswordCheck.sln
+            path: Plugins/OfflinePasswordCheck/OfflinePasswordCheck/OfflinePasswordCheck.csproj
         configuration: [Release, Debug]
 
     steps:
