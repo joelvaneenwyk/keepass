@@ -17,8 +17,17 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+using KeePass.Forms;
+using KeePass.Native;
+using KeePass.Resources;
+using KeePass.UI;
+using KeePass.Util.Spr;
+using KeePassLib;
+using KeePassLib.Delegates;
+using KeePassLib.Serialization;
+using KeePassLib.Utility;
+using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -27,20 +36,6 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-
-using Microsoft.Win32;
-
-using KeePass.Forms;
-using KeePass.Native;
-using KeePass.Resources;
-using KeePass.UI;
-using KeePass.Util.Spr;
-
-using KeePassLib;
-using KeePassLib.Delegates;
-using KeePassLib.Serialization;
-using KeePassLib.Utility;
-
 using NativeLib = KeePassLib.Native.NativeLib;
 
 namespace KeePass.Util
@@ -425,7 +420,8 @@ namespace KeePass.Util
 			if(string.IsNullOrEmpty(str))
 			{
 				str = Assembly.GetExecutingAssembly().GetName().CodeBase;
-				str = UrlUtil.FileUrlToPath(str);
+				try { str = UrlUtil.FileUrlToPath(str); }
+				catch (Exception) { }
 			}
 
 			g_strExePath = str;
@@ -599,7 +595,7 @@ namespace KeePass.Util
 				{
 					if(s == null) { Debug.Assert(false); return null; }
 
-					using(SHA256Managed h = new SHA256Managed())
+					using (SHA256 h = SHA256.Create())
 					{
 						return h.ComputeHash(s);
 					}

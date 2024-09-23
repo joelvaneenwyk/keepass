@@ -17,6 +17,20 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+using KeePass.App;
+using KeePass.App.Configuration;
+using KeePass.Native;
+using KeePass.Resources;
+using KeePass.UI.ToolStripRendering;
+using KeePass.Util;
+using KeePass.Util.MultipleValues;
+using KeePass.Util.Spr;
+using KeePassLib;
+using KeePassLib.Collections;
+using KeePassLib.Delegates;
+using KeePassLib.Interfaces;
+using KeePassLib.Utility;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -28,24 +42,6 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-
-using Microsoft.Win32;
-
-using KeePass.App;
-using KeePass.App.Configuration;
-using KeePass.Native;
-using KeePass.Resources;
-using KeePass.UI.ToolStripRendering;
-using KeePass.Util;
-using KeePass.Util.MultipleValues;
-using KeePass.Util.Spr;
-
-using KeePassLib;
-using KeePassLib.Collections;
-using KeePassLib.Delegates;
-using KeePassLib.Interfaces;
-using KeePassLib.Utility;
-
 using NativeLib = KeePassLib.Native.NativeLib;
 
 namespace KeePass.UI
@@ -675,6 +671,7 @@ namespace KeePass.UI
 		/// <param name="vColumns">Columns of the <c>ListView</c>. The first
 		/// parameter of the key-value pair is the internal string field name,
 		/// and the second one the text displayed in the column header.</param>
+		/// <param name="ilIcons"></param>
 		public static void CreateEntryList(ListView lv, IEnumerable<PwEntry> vEntries,
 			List<KeyValuePair<string, string>> vColumns, ImageList ilIcons)
 		{
@@ -932,6 +929,8 @@ namespace KeePass.UI
 		/// <param name="strExtension">Default extension(s), without leading
 		/// dot. Multiple extensions must be separated by a '|' (e.g.
 		/// "html|htm", having the same description "HTML Files").</param>
+		/// <param name="strDescription"></param>
+		/// <param name="bIncludeAllFiles"></param>
 		public static string CreateFileTypeFilter(string strExtension, string strDescription,
 			bool bIncludeAllFiles)
 		{
@@ -3557,15 +3556,7 @@ namespace KeePass.UI
 
 				if(bOp)
 				{
-					ContextMenu cm = cCtx.ContextMenu;
-					ContextMenuStrip cms = cCtx.ContextMenuStrip;
-
-					if(cms != null) cms.Show(Cursor.Position);
-					else if(cm != null)
-					{
-						Point pt = cCtx.PointToClient(Cursor.Position);
-						cm.Show(cCtx, pt);
-					}
+					cCtx.ContextMenuStrip?.Show(Cursor.Position);
 				}
 
 				UIUtil.SetHandled(e, true);

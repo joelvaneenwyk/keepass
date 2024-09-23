@@ -17,16 +17,6 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using System.IO;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading;
-using System.Windows.Forms;
-
 using KeePass.App;
 using KeePass.App.Configuration;
 using KeePass.DataExchange;
@@ -39,7 +29,6 @@ using KeePass.Util;
 using KeePass.Util.Archive;
 using KeePass.Util.MultipleValues;
 using KeePass.Util.Spr;
-
 using KeePassLib;
 using KeePassLib.Collections;
 using KeePassLib.Cryptography;
@@ -51,7 +40,15 @@ using KeePassLib.Keys;
 using KeePassLib.Security;
 using KeePassLib.Serialization;
 using KeePassLib.Utility;
-
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading;
+using System.Windows.Forms;
 using NativeLib = KeePassLib.Native.NativeLib;
 
 namespace KeePass.Forms
@@ -1530,6 +1527,7 @@ namespace KeePass.Forms
 		/// parameter is <c>null</c>, the entries of the currently selected group
 		/// (groups view) are displayed, otherwise the entries of the <c>pgSelected</c>
 		/// group are displayed.</param>
+		/// <param name="bOnlyUpdateCurrentlyShown"></param>
 		private void UpdateEntryList(PwGroup pgSelected, bool bOnlyUpdateCurrentlyShown)
 		{
 			NotifyUserActivity();

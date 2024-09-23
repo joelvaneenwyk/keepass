@@ -231,7 +231,9 @@ namespace KeePassLib.Serialization
 					sStat = SimpleStat.Get(m_iocBase.Path);
 #if !KeePassUAP
 					// May throw with Mono
-					FileSecurity sec = File.GetAccessControl(m_iocBase.Path, acs);
+					// #todo #jve
+					FileInfo fileInfo = new FileInfo(m_iocBase.Path);
+					FileSecurity sec = fileInfo.GetAccessControl(acs);
 					if(sec != null) pbSec = sec.GetSecurityDescriptorBinaryForm();
 #endif
 				}
@@ -277,7 +279,9 @@ namespace KeePassLib.Serialization
 					FileSecurity sec = new FileSecurity();
 					sec.SetSecurityDescriptorBinaryForm(pbSec, acs);
 
-					File.SetAccessControl(m_iocBase.Path, sec);
+					// #todo #jve
+					FileInfo fileInfo = new FileInfo(m_iocBase.Path);
+					fileInfo.SetAccessControl(sec);
 				}
 #endif
 			}

@@ -17,23 +17,19 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-
 using KeePass.App;
 using KeePass.App.Configuration;
 using KeePass.Native;
 using KeePass.Resources;
 using KeePass.UI;
-
 using KeePassLib;
 using KeePassLib.Security;
 using KeePassLib.Utility;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace KeePass.Forms
 {
@@ -105,6 +101,7 @@ namespace KeePass.Forms
 		/// brought to the foreground when showing it.</param>
 		/// <param name="uCharCount">Number of characters to pick. Specify
 		/// 0 to allow picking a variable amount of characters.</param>
+		/// <param name="obInitHide"></param>
 		public void InitEx(ProtectedString psWord, bool bCenterScreen,
 			bool bSetForeground, uint uCharCount, bool? obInitHide)
 		{

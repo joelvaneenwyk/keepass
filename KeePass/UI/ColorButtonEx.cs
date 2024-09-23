@@ -17,15 +17,13 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+using KeePass.Resources;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-
-using KeePass.Resources;
 
 namespace KeePass.UI
 {
@@ -35,7 +33,7 @@ namespace KeePass.UI
 		private ToolTip m_tt = null;
 
 		private CustomContextMenuEx m_ctx = null;
-		private readonly List<ColorMenuItem> m_lMenuItems = new List<ColorMenuItem>();
+		private readonly List<ToolStripItem> m_lMenuItems = new();
 
 		private Color[] m_vColors = null;
 		[Browsable(false)]
@@ -134,13 +132,13 @@ namespace KeePass.UI
 				mi.Click += this.OnColorMenuItemClick;
 
 				if(((i % nBreakAt) == 0) && (i != 0))
-					mi.Break = true;
+					m_lMenuItems.Add(new ToolStripSeparator());
 
 				m_lMenuItems.Add(mi);
 			}
 
-			m_ctx = new CustomContextMenuEx();
-			m_ctx.MenuItems.AddRange(m_lMenuItems.ToArray());
+			m_ctx = new();
+			m_ctx.Items.AddRange(m_lMenuItems.ToArray());
 			m_ctx.ShowEx(this);
 		}
 

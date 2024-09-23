@@ -17,15 +17,7 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
-using System.Runtime.InteropServices;
-using System.Text;
-
 using KeePass.Resources;
-
 using KeePassLib;
 using KeePassLib.Collections;
 using KeePassLib.Cryptography.KeyDerivation;
@@ -35,6 +27,12 @@ using KeePassLib.Keys;
 using KeePassLib.Resources;
 using KeePassLib.Security;
 using KeePassLib.Utility;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
+using System.Runtime.InteropServices;
+using System.Text;
 
 namespace KeePass.DataExchange
 {
@@ -81,6 +79,7 @@ namespace KeePass.DataExchange
 		/// </summary>
 		/// <param name="pwDataStore">The <c>PwDatabase</c> instance that the class
 		/// will load file data into or use to create a KDB file. Must not be <c>null</c>.</param>
+		/// <param name="slLogger"></param>
 		/// <exception cref="System.ArgumentNullException">Thrown if the database
 		/// reference is <c>null</c>.</exception>
 		public KdbFile(PwDatabase pwDataStore, IStatusLogger slLogger)
@@ -264,6 +263,7 @@ namespace KeePass.DataExchange
 		/// Save the contents of the current <c>PwDatabase</c> to a KDB file.
 		/// </summary>
 		/// <param name="strSaveToFile">Location to save the KDB file to.</param>
+		/// <param name="pgDataSource"></param>
 		public void Save(string strSaveToFile, PwGroup pgDataSource)
 		{
 			Debug.Assert(strSaveToFile != null);

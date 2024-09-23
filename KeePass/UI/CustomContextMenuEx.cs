@@ -17,19 +17,14 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 namespace KeePass.UI
 {
-	public sealed class CustomContextMenuEx : ContextMenu
+	public sealed class CustomContextMenuEx : ContextMenuStrip
 	{
-		public CustomContextMenuEx() : base() { }
-
 		public void ShowEx(Control cParent)
 		{
 			if(cParent == null) { Debug.Assert(false); return; }
@@ -37,8 +32,7 @@ namespace KeePass.UI
 			if(cParent.RightToLeft == RightToLeft.Yes)
 			{
 				this.RightToLeft = RightToLeft.Yes;
-				Show(cParent, new Point(cParent.Width, cParent.Height),
-					LeftRightAlignment.Left);
+				Show(cParent, new Point(cParent.Width, cParent.Height), ToolStripDropDownDirection.Left);
 			}
 			else Show(cParent, new Point(0, cParent.Height));
 		}

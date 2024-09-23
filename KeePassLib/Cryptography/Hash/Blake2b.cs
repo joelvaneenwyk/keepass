@@ -20,16 +20,10 @@
 // This implementation is based on the official reference C
 // implementation by Samuel Neves (CC0 1.0 Universal).
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
-
-#if !KeePassUAP
-using System.Security.Cryptography;
-#endif
-
 using KeePassLib.Utility;
+using System;
+using System.Diagnostics;
+using System.Security.Cryptography;
 
 namespace KeePassLib.Cryptography.Hash
 {
