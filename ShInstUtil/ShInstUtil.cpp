@@ -277,11 +277,15 @@ void CheckDotNetInstalled()
 	OSVERSIONINFO osv;
 	ZeroMemory(&osv, sizeof(OSVERSIONINFO));
 	osv.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+#	pragma warning(push)
+#	pragma warning(disable : 4996)
+	// ReSharper disable once CppDeprecatedEntity
 	GetVersionEx(&osv);
+#	pragma warning(pop)
 	if(osv.dwMajorVersion >= 6) return; // .NET ships with Vista and higher
 
 	const std_string strNGen = FindNGen();
-	if(strNGen.size() == 0)
+	if(strNGen.empty())
 	{
 		std_string strMsg = _T("KeePass 2.x requires the Microsoft .NET Framework 2.0 or higher. ");
 		strMsg += _T("This framework currently does not seem to be installed ");
