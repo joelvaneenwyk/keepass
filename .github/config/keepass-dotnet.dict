@@ -21,6 +21,7 @@ lzma
 modelproj
 msbuild
 NDEBUG
+NETSDK
 nupkg
 Preserialized
 reichl
@@ -30,12 +31,14 @@ Serialisation
 sgen
 snupkg
 sqlproj
+SYSLIB
 Toolset
 vcpkg
 vcproj
 vcxitems
 vshost
 vspscc
+WFAC
 wixproj
 wwaproj
 Xorred
