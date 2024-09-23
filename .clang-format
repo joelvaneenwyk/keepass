@@ -1,0 +1,16 @@
+# clang-format configuration for KeePass
+BasedOnStyle: WebKit
+UseTab: Always
+BraceWrapping:
+  AfterClass: true
+  AfterControlStatement: Always
+  AfterFunction: true
+  AfterNamespace: true
+  SplitEmptyFunction: false
+BreakBeforeBinaryOperators: None
+BreakBeforeBraces: Custom
+BreakBeforeInheritanceComma: true
+BreakConstructorInitializers: AfterColon
+MaxEmptyLinesToKeep: 2
+SortIncludes: Never
+SpaceBeforeCtorInitializerColon: false
