@@ -103,7 +103,7 @@ namespace KeePassLib.Cryptography
 				m_pbKey = new byte[32];
 				m_pbIV = new byte[12];
 
-				using(SHA512Managed h = new SHA512Managed())
+				using (SHA3_512 h = SHA3_512.Create())
 				{
 					byte[] pbHash = h.ComputeHash(pbKey);
 					Array.Copy(pbHash, m_pbKey, 32);

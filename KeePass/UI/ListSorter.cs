@@ -17,15 +17,13 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+using KeePass.Resources;
+using KeePassLib.Utility;
 using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Forms;
-
-using KeePass.Resources;
-
-using KeePassLib.Utility;
 
 namespace KeePass.UI
 {
@@ -40,7 +38,7 @@ namespace KeePass.UI
 		{
 			get { return m_nColumn; }
 
-			/// Only provided for XML serialization, do not use
+			// Only provided for XML serialization, do not use
 			set { m_nColumn = value; }
 		}
 
@@ -49,7 +47,7 @@ namespace KeePass.UI
 		{
 			get { return m_oSort; }
 
-			/// Only provided for XML serialization, do not use
+			// Only provided for XML serialization, do not use
 			set { m_oSort = value; }
 		}
 
@@ -59,7 +57,7 @@ namespace KeePass.UI
 		{
 			get { return m_bCompareNaturally; }
 
-			/// Only provided for XML serialization, do not use
+			// Only provided for XML serialization, do not use
 			set { m_bCompareNaturally = value; }
 		}
 
@@ -69,7 +67,7 @@ namespace KeePass.UI
 		{
 			get { return m_bCompareTimes; }
 
-			/// Only provided for XML serialization, do not use
+			// Only provided for XML serialization, do not use
 			set { m_bCompareTimes = value; }
 		}
 

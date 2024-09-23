@@ -113,7 +113,12 @@ namespace KeePass.App.Configuration
 				catch(Exception) { }
 
 				if(string.IsNullOrEmpty(strFile))
+				{
+					try {
 					strFile = UrlUtil.FileUrlToPath(asm.GetName().CodeBase);
+					}
+					catch (Exception) { }
+				}
 #else
 				string strFile = UrlUtil.FileUrlToPath(asm.GetName().CodeBase);
 #endif

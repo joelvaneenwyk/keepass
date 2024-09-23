@@ -17,24 +17,21 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-
 using KeePass.App;
 using KeePass.App.Configuration;
 using KeePass.Resources;
 using KeePass.UI;
 using KeePass.Util;
-
 using KeePassLib;
 using KeePassLib.Cryptography.PasswordGenerator;
 using KeePassLib.Security;
 using KeePassLib.Utility;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
 
 namespace KeePass.Forms
 {
@@ -69,6 +66,8 @@ namespace KeePass.Forms
 		/// Initialize this password generator form instance.
 		/// </summary>
 		/// <param name="pwInitial">Initial options (may be <c>null</c>).</param>
+		/// <param name="bCanAccept"></param>
+		/// <param name="bForceInTaskbar"></param>
 		public void InitEx(PwProfile pwInitial, bool bCanAccept, bool bForceInTaskbar)
 		{
 			m_optInitial = pwInitial;

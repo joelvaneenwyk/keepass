@@ -746,6 +746,7 @@ namespace KeePass.Util
 		/// that the option for expiring TANs on use is enabled.
 		/// </summary>
 		/// <param name="pe">Entry.</param>
+		/// <param name="pdContext"></param>
 		/// <returns>If the entry has been modified, the return value is
 		/// <c>true</c>, otherwise <c>false</c>.</returns>
 		public static bool ExpireTanEntryIfOption(PwEntry pe, PwDatabase pdContext)

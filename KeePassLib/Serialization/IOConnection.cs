@@ -18,12 +18,10 @@
 */
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Reflection;
-using System.Text;
 
 #if (!KeePassLibSD && !KeePassUAP)
 using System.Net.Cache;
@@ -508,7 +506,9 @@ namespace KeePassLib.Serialization
 
 			try
 			{
+#pragma warning disable CS0618 // Type or member is obsolete
 				SecurityProtocolType spt = (SecurityProtocolType.Ssl3 |
+#pragma warning restore CS0618 // Type or member is obsolete
 					SecurityProtocolType.Tls);
 
 				// The flags Tls11 and Tls12 in SecurityProtocolType have been

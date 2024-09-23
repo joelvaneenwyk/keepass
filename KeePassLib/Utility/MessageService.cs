@@ -17,18 +17,14 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+using KeePassLib.Resources;
+using KeePassLib.Serialization;
 using System;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Text;
 using System.Threading;
-
-#if !KeePassUAP
 using System.Windows.Forms;
-#endif
-
-using KeePassLib.Resources;
-using KeePassLib.Serialization;
 
 namespace KeePassLib.Utility
 {

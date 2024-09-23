@@ -425,6 +425,8 @@ namespace KeePass.App.Configuration
 			ioc.Path = UrlUtil.ConvertSeparators(ioc.Path);
 
 			string strBase = WinUtil.GetExecutable();
+			if (strBase == null) return;
+
 			bool bIsAbs = UrlUtil.IsAbsolutePath(ioc.Path);
 
 			if(bMakeAbsolute && !bIsAbs)

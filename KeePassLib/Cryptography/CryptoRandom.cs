@@ -17,22 +17,17 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
-
-#if !KeePassUAP
-using System.Drawing;
-using System.Security.Cryptography;
-using System.Windows.Forms;
-#endif
-
 using KeePassLib.Delegates;
 using KeePassLib.Native;
 using KeePassLib.Security;
 using KeePassLib.Utility;
+using System;
+using System.Collections;
+using System.Diagnostics;
+using System.Drawing;
+using System.Globalization;
+using System.Security.Cryptography;
+using System.Windows.Forms;
 
 namespace KeePassLib.Cryptography
 {
@@ -119,7 +114,7 @@ namespace KeePassLib.Cryptography
 #if KeePassLibSD
 				using(SHA256Managed hNew = new SHA256Managed())
 #else
-				using(SHA512Managed hNew = new SHA512Managed())
+				using (SHA256 hNew = SHA256.Create())
 #endif
 				{
 					pbNewData = hNew.ComputeHash(pbEntropy);
@@ -156,7 +151,7 @@ namespace KeePassLib.Cryptography
 
 		private byte[] GetSystemEntropy()
 		{
-			SHA512Managed h = new SHA512Managed();
+			SHA3_512 h = SHA3_512.Create();
 			byte[] pb4 = new byte[4];
 			byte[] pb8 = new byte[8];
 

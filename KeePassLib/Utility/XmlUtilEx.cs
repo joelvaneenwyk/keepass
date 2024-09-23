@@ -17,18 +17,15 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Text;
-using System.Xml;
-using System.Xml.Serialization;
-using System.Xml.XPath;
-
 using KeePassLib.Delegates;
 using KeePassLib.Interfaces;
 using KeePassLib.Serialization;
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Xml;
+using System.Xml.Serialization;
+using System.Xml.XPath;
 
 namespace KeePassLib.Utility
 {
@@ -59,7 +56,9 @@ namespace KeePassLib.Utility
 			xrs.DtdProcessing = DtdProcessing.Prohibit;
 #else
 			// See also PrepMonoDev.sh script
+#pragma warning disable CS0618 // Type or member is obsolete
 			xrs.ProhibitDtd = true; // Obsolete in .NET 4, but still there
+#pragma warning restore CS0618 // Type or member is obsolete
 			// xrs.DtdProcessing = DtdProcessing.Prohibit; // .NET 4 only
 #endif
 
