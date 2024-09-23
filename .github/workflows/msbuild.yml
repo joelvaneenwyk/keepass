@@ -45,7 +45,7 @@ jobs:
         dotnet-version: '8.x'
 
     - name: Restore Packages
-      run: dotnet restore "${{ matrix.project.path }}"
+      run: dotnet restore "${{ matrix.project.path }}" --locked-mode --verbosity diagnostic
 
     - name: Build ${{ matrix.project.name}}
-      run: dotnet build "${{ matrix.project.path }}" --configuration "${{ matrix.configuration }}"
+      run: dotnet build "${{ matrix.project.path }}" --configuration "${{ matrix.configuration }}" --verbosity diagnostic
