@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net462</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <OutputType>Library</OutputType>
     <AssemblyOriginatorKeyFile>KeePassLib.pfx</AssemblyOriginatorKeyFile>
-    <PublishUrl>publish\</PublishUrl>
+    <PublishUrl>publish/</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -22,7 +22,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
-    <Platforms>AnyCPU;x64</Platforms>
+    <Platforms>x64</Platforms>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="obj\**" />
@@ -30,18 +30,8 @@
     <None Remove="obj\**" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="System.Security" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Update="Serialization\IOConnection.cs">
       <SubType>Component</SubType>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
   </ItemGroup>
 </Project>
